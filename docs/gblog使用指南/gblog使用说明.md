@@ -12,12 +12,20 @@ UpdateAt: 2021-04-12 00:44:00
 
 ### 启动博客
 
+执行 ./gblog 文件，启动博客服务
+
 ```bash
 # gblog 博客服务目录结构
 .
 ├── articles                                    # 将你的Markdown文件放在此目录中
 │   └── gblog使用说明.md           # 本教程文章
 ├── config.toml                            # 默认配置
+├── static                                      # 博客网站使用的静态资源
+│     ├── css                                   # 博客用到的层叠样式表
+│     │     └── bulma.min.css        # 默认采用bulma库
+│     └── image                             # 网站用的图片
+│            ├── favicon.ico               # 网站收藏图标
+│            └── logo.png                   # 网站logo
 └── gblog                                      # gblog服务执行文件
 
 # 启动服务命令
@@ -36,6 +44,8 @@ UpdateAt: 2021-04-12 00:44:00
 可以看到 `http://127.0.0.1:3000` 就是博客网页地址，访问它就能打开你的博客，就这么简单。
 
 ![快速开始结果](/docs/assets/image/quickstart.png)
+
+在`./gblog`
 
 ### 文章中引用图片
 
@@ -145,9 +155,13 @@ articles
 
 可以看到这篇文章放在`articles`目录下，点击导航栏中【分类】->【未分类】可以看出它属于“未分类”。
 
+## 修改配置
+
+通过修改配置`config.toml`可以定制博客外观，修改需要将在重启gblog服务后生效。
+
 ### 设置站点名称
 
-使用文本编辑器打开 `config.toml` 文件，修改【WebsiteName】后面的值，比如：
+使用文本编辑器打开 `config.toml` 文件，修改`WebsiteName`后面的值，比如：
 
 ```toml
 # 站点名称
@@ -159,3 +173,98 @@ WebsiteName = "牛莫旺的窝窝"
 嗯，你发现了这个文件里面还有许多其他的配置，如果你能读明白注释，可以尝试自行配置其他项。
 
 > 在配置文件config.toml中，#号以及后面的文字都被视为注释，gblog会忽略它们。
+
+### 设置站点页脚
+
+消注释`WebsiteFooter`项的注释，然后重启gblog服务。
+
+```toml
+# 网站页脚内容
+# 将路径指向`ArticleDir`以获得不停服加载修改的能力
+WebsiteFooter = "articles/footer.md" # 去掉行首的#号，以取消注释
+```
+
+新建文件`articles/footer.md`，并写入页脚显示的内容，比如：
+
+```md
+欢迎您访问 **[牛莫旺的窝窝](http://youdomain.com)** ，想寻求合作请联系 <email>niumowang@qq.com</email>
+```
+
+### 修改Logo与收藏图标
+
+- 修改Logo文件，用你的Logo文件`logo.png`替换掉`static/image/logo.png`。
+- 修改收藏图标，用你的图标收藏文件`favicon.ico`替换掉`static/image/favicon.ico`。
+- 完成后重启gblog服务，修改将会生效。
+
+### 修改文章内代码样式
+
+`ArticleCodeStyle`设置代码高亮风格，取值请参见[此网页](https://xyproto.github.io/splash/docs/all.html)
+
+`ArticleCodeShowLineNumber`设置是否显示行号，true显示，false隐藏
+
+```toml
+# 文章内代码语法高亮风格
+# 取值范围：https://xyproto.github.io/splash/docs/all.html
+ArticleCodeStyle = "perldoc"
+# 文章内代码显示行号
+ArticleCodeShowLineNumber = true
+```
+
+需重启服务后修改才能设置生效。
+
+### 文章支持MathJax
+
+文章支持显示漂亮的数学公式，通过开启MathJax
+
+```toml
+# 文章支持MathJax，详情参见：https://github.com/litao91/goldmark-mathjax
+ArticleMathJax = true # 取消此行注释，重启服务后生效
+```
+
+MathJax支持LaTeX语法，在Markdown使用格式如下：
+
+```md
+$$
+/<你的LaTeX内容/>
+$$
+```
+
+可以看出仅需要在LaTeX内容首尾各增加一行“$$”即可。
+
+行内的公式，可以使用内联语法，即在内容前后各增加“$”即可。如下：
+
+```md
+仅剩$\frac{1}{2}$个梦想
+```
+
+重启gblog服务，生效后的效果
+
+![内联LaTeX内容](/docs/assets/image/inlinelatex.png)
+
+### 设置分类别名
+
+gblog使用目录相对路径作为分类名，当目录层级太深时，你也许想要给长长名字取个短点的别名。
+比如我们有个`articles/我/的/名字/很长/啊.md`文件，要修改它所在的分类`我/的/名字/很长`，
+为`短类名`，目录结构如下
+
+```bash
+articles/我
+└── 的
+    └── 名字
+        └── 很长
+            └── 啊.md
+```
+
+![长类别名](/docs/assets/image/longcategory.png)
+
+只需要在`config.toml`末尾加上如下几行配置
+
+```toml
+[[Category]]
+Name = "短类名"
+Path = "我/的/名字/很长"
+```
+
+重启gblog服务，生效后的效果
+
+![修改类别名称](/docs/assets/image/changecategory.png)

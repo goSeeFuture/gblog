@@ -13,7 +13,7 @@ MaxMetaDataLen = 256
 WebsiteName = "我的博客"
 # 网站页脚内容
 # 将路径指向`ArticleDir`以获得不停服加载修改的能力
-# WebsiteFooter = "articles/footer.md"
+WebsiteFooter = "articles/footer.md"
 # 显示未分类
 ShowUncategorized = true
 # 每页显示文章数
@@ -34,6 +34,6 @@ ArticleMathJax = true
 # 定义多个Cateory，Path重复将产生覆盖
 # [[Category]]
 # 分类名称，默认取Path
-# Name = "基础"
+# Name = "短类名"
 # 所在路径，基于ArticleDir的相对路径
-# Path = "basic"
+# Path = "我/的/名字/很长"
