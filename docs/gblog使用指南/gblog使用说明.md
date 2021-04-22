@@ -45,7 +45,7 @@ UpdateAt: 2021-04-12 00:44:00
 ![快速开始结果](/docs/assets/image/quickstart.png)
 ```
 
-重新启动服务器，按`Ctrl+C`终止`./gblog`运行，并再次运行它。然后打开我们的博客首页
+打开我们的博客首页，按F5键刷新
 
 > 访问 http://127.0.0.1:3000 即博客首页
 
@@ -55,7 +55,6 @@ UpdateAt: 2021-04-12 00:44:00
 
 1. 在`articles`目录下建立`assets/image`目录
 2. 将`quickstart.png`文件放入到`articles/assets/image`中
-3. 再次重启服务器
 
 再次访问博客，可以看到图片成功的显示出来了
 
@@ -76,7 +75,7 @@ articles
 当你的博客有许多不同类别的文章时，希望能进行分类整理，便于博客访问者找到自己感兴趣的那类文章。
 在gblog中，你只需要建立以类别命名的目录，同时把相关文章放进去，博客顶部导航中就会显示出分类。
 
-比如，将我刚刚写的文章放到 `articles/gblog使用指南` 目录下，然后重启服务
+比如，将我刚刚写的文章放到 `articles/gblog使用指南` 目录下，然后刷新博客页面
 
 ![新建分类](/docs/assets/image/newcategory.png)
 
@@ -120,7 +119,7 @@ Tags:           # 为此文章设定标签，可以是1个或者多个
 
 **注意**：“头数据”前后，必须有一行“---”gblog才能正确识别。
 
-将文章放入`articles`目录，重启服务后，访问[该文章](http://localhost:3000/articles/%e7%b2%be%e7%a5%9e%e7%9a%84%e5%81%a5%e5%ba%b7%e5%8f%96%e5%86%b3%e4%ba%8e%e6%83%85%e6%84%9f.md)可以看到
+将文章放入`articles`目录，刷新页面访问[该文章](http://localhost:3000/articles/%e7%b2%be%e7%a5%9e%e7%9a%84%e5%81%a5%e5%ba%b7%e5%8f%96%e5%86%b3%e4%ba%8e%e6%83%85%e6%84%9f.md)可以看到
 
 ![新增标签](/docs/assets/image/newtag.png)
 
