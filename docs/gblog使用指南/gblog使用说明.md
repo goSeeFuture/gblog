@@ -42,14 +42,14 @@ UpdateAt: 2021-04-12 00:44:00
 让我们丰富以下文章，加入一张图片，Markdown引用图片如下：
 
 ```md
-![快速开始结果](/image/quickstart.png)
+![快速开始结果](/docs/assets/image/quickstart.png)
 ```
 
 重新启动服务器，按`Ctrl+C`终止`./gblog`运行，并再次运行它。然后打开我们的博客首页
 
 > 访问 http://127.0.0.1:3000 即博客首页
 
-![没有显示图片](/image/nopicture.png)
+![没有显示图片](/docs/assets/image/nopicture.png)
 
 结果如上图，图片并没有显示出来，这是因为我们还没有指定文章中引用图片的位置，接下来我们指定它。
 
@@ -59,7 +59,7 @@ UpdateAt: 2021-04-12 00:44:00
 
 再次访问博客，可以看到图片成功的显示出来了
 
-![引入图片成功](/image/pictureok.png)
+![引入图片成功](/docs/assets/image/pictureok.png)
 
 此时，articles的目录结构如下：
 
@@ -78,7 +78,7 @@ articles
 
 比如，将我刚刚写的文章放到 `articles/gblog使用指南` 目录下，然后重启服务
 
-![新建分类](/image/newcategory.png)
+![新建分类](/docs/assets/image/newcategory.png)
 
 如图，点击某个分类，gblog博客就会罗列出分类中的所有文章。大家发现，除了我们新建的分类外，还有一个
 名叫`未分类`的项，这个项显示的是`articles`目录下的所有文章，当我们博客文章数量较少时，用不到分类，
@@ -122,11 +122,11 @@ Tags:           # 为此文章设定标签，可以是1个或者多个
 
 将文章放入`articles`目录，重启服务后，访问[该文章](http://localhost:3000/articles/%e7%b2%be%e7%a5%9e%e7%9a%84%e5%81%a5%e5%ba%b7%e5%8f%96%e5%86%b3%e4%ba%8e%e6%83%85%e6%84%9f.md)可以看到
 
-![新增标签](/image/newtag.png)
+![新增标签](/docs/assets/image/newtag.png)
 
 在文章右上角，出现我们新增的3个标签，点击某个标签，就能找到拥有同样标签的文章。另外，也可以通过导航栏中的“标签”菜单，查看所有拥有此标签的文章。
 
-![当行栏中的标签菜单](/image/navtags.png)
+![当行栏中的标签菜单](/docs/assets/image/navtags.png)
 
 此时目录结构
 
