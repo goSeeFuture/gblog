@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	configs "github.com/goSeeFuture/gblogconfigs"
+	configs "github.com/goSeeFuture/gblog/configs"
 )
 
 func ArticlesByCategoryPage(categoryId string, pageSize, pageNumber int) (total int, heads []MetaData) {

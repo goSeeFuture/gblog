@@ -2,7 +2,6 @@ package content
 
 import (
 	"bytes"
-	"gblog/configs"
 	"html/template"
 	"io"
 	"log"
@@ -11,6 +10,8 @@ import (
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"github.com/goSeeFuture/gblog/configs"
 
 	"gopkg.in/yaml.v2"
 )

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	configs "github.com/goSeeFuture/gblogconfigs"
+	configs "github.com/goSeeFuture/gblog/configs"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/valyala/bytebufferpool"

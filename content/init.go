@@ -1,9 +1,10 @@
 package content
 
 import (
-	"gblog/configs"
 	"log"
 	"sort"
+
+	"github.com/goSeeFuture/gblog/configs"
 )
 
 const UncategorizedId = "uncategorized"

@@ -6,7 +6,7 @@ UpdateAt: 2021-04-12 00:44:00
 ---
 # gblog使用说明
 
-[gblog](https://github.com/goSeeFuture/gblog) 是一款基于Markdown文件的轻量博客。它的使用和维护都比较简单，无需编程知识，只需要在`articles`目录中放入Markdown文件，然后启动服务即可。
+[gblog](https://github.com/goSeeFuture/gblog/) 是一款基于Markdown文件的轻量博客。它的使用和维护都比较简单，无需编程知识，只需要在`articles`目录中放入Markdown文件，然后启动服务即可。
 
 ## 快速开始
 

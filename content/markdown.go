@@ -2,8 +2,9 @@ package content
 
 import (
 	"bytes"
-	"gblog/configs"
 	"io/ioutil"
+
+	"github.com/goSeeFuture/gblog/configs"
 
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/beevik/etree"

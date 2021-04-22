@@ -2,8 +2,6 @@ package service
 
 import (
 	"fmt"
-	"github.com/goSeeFuture/gblogconfigs"
-	"github.com/goSeeFuture/gblogcontent"
 	"html/template"
 	"log"
 	"net/http"
@@ -11,6 +9,9 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/goSeeFuture/gblog/configs"
+	"github.com/goSeeFuture/gblog/content"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/goSeeFuture/gblogconfigs"
-	"github.com/goSeeFuture/gblogcontent"
-	"github.com/goSeeFuture/gblogservice"
+	"github.com/goSeeFuture/gblog/configs"
+	"github.com/goSeeFuture/gblog/content"
+	"github.com/goSeeFuture/gblog/service"
 
 	"github.com/gofiber/fiber/v2"
 )

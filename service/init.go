@@ -2,8 +2,9 @@ package service
 
 import (
 	"errors"
-	"gblog/configs"
 	"log"
+
+	"github.com/goSeeFuture/gblog/configs"
 
 	"github.com/gofiber/fiber/v2"
 
