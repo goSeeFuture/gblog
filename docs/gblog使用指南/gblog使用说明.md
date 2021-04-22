@@ -35,7 +35,7 @@ UpdateAt: 2021-04-12 00:44:00
 
 可以看到 `http://127.0.0.1:3000` 就是博客网页地址，访问它就能打开你的博客，就这么简单。
 
-![快速开始结果](docs/assets/image/quickstart.png)
+![快速开始结果](/docs/assets/image/quickstart.png)
 
 ### 文章中引用图片
 
