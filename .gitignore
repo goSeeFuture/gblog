@@ -1,3 +1,5 @@
 articles/
 *-packr.go
 gblog
+gblog_*
+dist/

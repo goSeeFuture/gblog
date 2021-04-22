@@ -1,5 +1,3 @@
-// +build !embed
-
 package service
 
 import (
