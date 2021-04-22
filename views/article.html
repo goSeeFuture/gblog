@@ -1,0 +1,29 @@
+{{ define "body" }}
+
+{{ if .HasMetaHead }}
+
+    <section class="container" show="{{ .HasMetaHead }}">
+        <div class="tags is-pulled-right">
+            {{ range $tag := .ArticleTags }}
+            <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
+            {{ end }}
+        </div>
+        <div class="content">
+            {{ if not .InlineTitle }}
+            <h1>{{ .Title }}</h1>
+            {{ end }}
+            {{ if ne .UpdateAt "" }}
+            <p>最后编辑于：{{ .UpdateAt }}</p>
+            {{ end }}
+        </div>
+    </section>
+
+{{ end }}
+
+<section class="container">
+    <div class="content">
+        {{ .Article }}
+    </div>
+</section>
+
+{{ end }}

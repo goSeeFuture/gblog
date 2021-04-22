@@ -1,0 +1,36 @@
+# 监听地址
+Listen = "127.0.0.1:3000"
+# 文章目录
+ArticleDir = "articles"
+# 文章中引用资源路径，比如图片
+# 不支持和文章指定相同目标
+ArticleReferenceDir = "articles/assets"
+# 文章中引用资源路径，比如图片
+# ArticleReferenceDirs = ["articles/you/ref/path1", "articles/you/ref/path2"]
+# 头部yaml长度
+MaxMetaDataLen = 256
+# 站点名称
+WebsiteName = "我的博客"
+# 显示未分类
+ShowUncategorized = true
+# 每页显示文章数
+PageSize = 3
+# 分页前缀，用于避免与ArticleDir中的目录命名冲突
+# 不能使用url保留字符
+# PageNumberPrefix = "p"
+
+# 文章内代码语法高亮风格
+# 取值范围：https://xyproto.github.io/splash/docs/all.html
+ArticleCodeStyle = "perldoc"
+# 文章内代码显示行号
+ArticleCodeShowLineNumber = true
+# 文章支持MathJax，详情参见：https://github.com/litao91/goldmark-mathjax
+ArticleMathJax = true
+
+# 定义文章分类别名
+# 定义多个Cateory，Path重复将产生覆盖
+# [[Category]]
+# 分类名称，默认取Path
+# Name = "基础"
+# 所在路径，基于ArticleDir的相对路径
+# Path = "basic"

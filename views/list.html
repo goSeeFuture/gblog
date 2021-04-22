@@ -1,0 +1,44 @@
+{{ define "body" }}
+
+<section class="container">
+
+  {{ range $article := .Articles }}
+  <div class="tile is-ancestor">
+    <div class="tile is-parent">
+      <article class="tile is-child box  is-full">
+        <p class="title"><a class="article-title-link" href="/{{ $article.Filename }}">{{ $article.Title }}</a></p>
+        <p class="subtitle">{{ $article.Subtitle }}</p>
+        <div class="content">
+          <p>{{ $article.Summary }}</p>
+        </div>
+        <p>最后修改于：{{ FormatTime .UpdateAt }}</p>
+        <div class="tags is-pulled-right">
+          {{ range $tag := .Tags }}
+          <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
+          {{ end }}
+        </div>
+      </article>
+    </div>
+  </div>
+  {{ end }}
+
+
+  <nav class="pagination is-small" role="navigation" aria-label="pagination">
+    <a class="pagination-previous" href="{{ .PrevPage }}">上一页</a>
+    <a class="pagination-next" href="{{ .NextPage }}">下一页</a>
+    <ul class="pagination-list">
+      {{ range $page := .Pages }}
+      <li>
+        {{ if IsDigit $page }}
+        <a class="pagination-link {{ if eq $page $.CurPage }} {{ `is-current` }} {{ end }}"
+          href="{{ printf `/%s/%s%s`  $.ListType $.PageNumberPrefix $page }}">{{ $page }}</a>
+        {{ else }}
+        <span class="pagination-ellipsis">{{ $page }}</span>
+        {{ end}}
+      </li>
+      {{ end }}
+    </ul>
+  </nav>
+</section>
+
+{{ end }}
