@@ -34,6 +34,9 @@ type Config struct {
 	ArticleCodeShowLineNumber bool
 	// 文章支持MathJax，详情参见：https://github.com/litao91/goldmark-mathjax
 	ArticleMathJax bool
+	// 网站页脚内容
+	// 将路径指向`ArticleDir`以获得不停服加载修改的能力
+	WebsiteFooter string
 }
 
 // 文章分类别名

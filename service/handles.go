@@ -36,6 +36,7 @@ func listPage(c *fiber.Ctx) error {
 	return content.Render(c, "list", map[string]interface{}{
 		"Categories":       configs.Setting.Categories,
 		"Title":            configs.Setting.WebsiteName,
+		"Footer":           content.Footer(),
 		"Total":            total,
 		"Pages":            pages(maxPage, curPage),
 		"CurPage":          strconv.Itoa(curPage),
@@ -57,6 +58,7 @@ func articlePage(c *fiber.Ctx) error {
 	bind := map[string]interface{}{
 		"Categories": configs.Setting.Categories,
 		"Title":      configs.Setting.WebsiteName,
+		"Footer":     content.Footer(),
 	}
 
 	md, exist := content.FindMetaData(filename)
@@ -107,6 +109,7 @@ func categoryPage(c *fiber.Ctx) error {
 	return content.Render(c, "list", map[string]interface{}{
 		"Categories":       configs.Setting.Categories,
 		"Title":            configs.Setting.WebsiteName,
+		"Footer":           content.Footer(),
 		"Total":            total,
 		"Pages":            pages(maxPage, curPage),
 		"CurPage":          strconv.Itoa(curPage),
@@ -139,6 +142,7 @@ func tagPage(c *fiber.Ctx) error {
 	return content.Render(c, "list", map[string]interface{}{
 		"Categories":       configs.Setting.Categories,
 		"Title":            configs.Setting.WebsiteName,
+		"Footer":           content.Footer(),
 		"Total":            total,
 		"Pages":            pages(maxPage, curPage),
 		"CurPage":          strconv.Itoa(curPage),
@@ -219,18 +223,6 @@ func prevPage(maxPage, curPage int) string {
 	}
 
 	return strconv.Itoa(curPage - 1)
-}
-
-func suffixDigit(s string) (int, int) {
-	i := strings.LastIndex(s, "/")
-	if i == -1 {
-		return 0, 0
-	}
-
-	s = s[i+1:]
-	page := getPageNumber(s)
-
-	return page, i
 }
 
 func getPageNumber(s string) int {

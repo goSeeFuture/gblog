@@ -3,6 +3,8 @@ package content
 import (
 	"errors"
 	"html/template"
+	"io/ioutil"
+	"log"
 	"strconv"
 	"sync"
 	"time"
@@ -78,4 +80,20 @@ func fmtTime(t time.Time) string {
 		return "-"
 	}
 	return t.Format(configs.TimeLayout)
+}
+
+func Footer() template.HTML {
+	footer, err := ioutil.ReadFile(configs.Setting.WebsiteFooter)
+	if err != nil {
+		log.Println("load website footer failed:", err)
+		return ""
+	}
+
+	data := markdown2HTML(footer)
+	if data == nil {
+		log.Println("parse website footer failed")
+		return ""
+	}
+
+	return template.HTML(data)
 }

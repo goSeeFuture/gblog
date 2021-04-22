@@ -51,6 +51,11 @@ func List() (articles []MetaData) {
 			return nil
 		}
 
+		if path == configs.Setting.WebsiteFooter {
+			// log.Println("ignore website footer:", path)
+			return nil
+		}
+
 		if isArticleRefDirectory(path) {
 			// 跳过引用资源目录
 			return nil
