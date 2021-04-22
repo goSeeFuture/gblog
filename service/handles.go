@@ -45,7 +45,7 @@ func listPage(c *fiber.Ctx) error {
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
 		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.Tags,
+		"Tags":             content.GetTags(),
 	})
 }
 
@@ -116,7 +116,7 @@ func categoryPage(c *fiber.Ctx) error {
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
 		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.Tags,
+		"Tags":             content.GetTags(),
 	})
 }
 
@@ -148,7 +148,7 @@ func tagPage(c *fiber.Ctx) error {
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
 		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.Tags,
+		"Tags":             content.GetTags(),
 	})
 }
 

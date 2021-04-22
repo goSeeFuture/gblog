@@ -12,9 +12,13 @@ func ArticlesByCategoryPage(categoryId string, pageSize, pageNumber int) (total 
 	e := s + pageSize
 
 	isUncategorized := categoryId == UncategorizedId
+	var _articles []MetaData
+	cotentmutex.RLock()
+	_articles = articles
+	cotentmutex.RUnlock()
 
 	heads = []MetaData{}
-	for _, item := range articles {
+	for _, item := range _articles {
 		var chioce bool
 		if isUncategorized {
 			if filepath.Dir(item.Filename) == "articles" {

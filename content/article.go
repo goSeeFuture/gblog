@@ -97,33 +97,6 @@ func List() (articles []MetaData) {
 	return
 }
 
-func makeTagIndex(md []MetaData) (map[string][]int, []Tag) {
-	var tags []Tag
-	index := make(map[string][]int)
-	for i, e := range md {
-		for _, tag := range e.Tags {
-			array := index[tag]
-			array = append(array, i)
-			_, exist := index[tag]
-			index[tag] = array
-			if !exist {
-				tags = append(tags, Tag{Name: tag})
-			}
-		}
-	}
-
-	for tag, e := range index {
-		for i, et := range tags {
-			if et.Name == tag {
-				et.Count = len(e)
-				tags[i] = et
-				break
-			}
-		}
-	}
-	return index, tags
-}
-
 func getHeadContent(filename string, offset int) ([]byte, string, time.Time) {
 	file, err := os.OpenFile(filename, os.O_RDONLY, os.ModePerm)
 	if err != nil {
@@ -230,46 +203,36 @@ func ArticlesByPage(pageSize, pageNumber int) (total int, heads []MetaData) {
 	s := pageSize * (pageNumber - 1)
 	e := s + pageSize
 
+	var _articles []MetaData
+	cotentmutex.RLock()
+	_articles = articles
+	cotentmutex.RUnlock()
+
 	heads = []MetaData{}
-	total = len(articles)
+	total = len(_articles)
 	if s > total {
 		return
 	}
 
-	if e > len(articles) {
+	if e > len(_articles) {
 		e = total
 	}
 
-	heads = articles[s:e]
+	heads = _articles[s:e]
 	return
 }
 
 func FindMetaData(filename string) (MetaData, bool) {
-	for _, e := range articles {
+	var _articles []MetaData
+	cotentmutex.RLock()
+	_articles = articles
+	defer cotentmutex.RUnlock()
+	for _, e := range _articles {
 		if e.Filename == filename {
 			return e, true
 		}
 	}
 	return MetaData{}, false
-}
-
-func ArticlesByTagPage(tag string, pageSize, pageNumber int) (total int, heads []MetaData) {
-	s := pageSize * (pageNumber - 1)
-	e := s + pageSize
-
-	array := tagIndex[tag]
-	total = len(array)
-
-	if s >= total {
-		return total, []MetaData{}
-	}
-
-	for i, index := range array {
-		if i >= s && i < e {
-			heads = append(heads, articles[index])
-		}
-	}
-	return
 }
 
 func isArticleRefDirectory(path string) bool {
