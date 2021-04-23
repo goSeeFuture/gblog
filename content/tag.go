@@ -32,25 +32,16 @@ func makeTagIndex(md []MetaData) (map[string][]int, []Tag) {
 	return index, tags
 }
 
-func GetTags() []Tag {
-	var _tags []Tag
-	cotentmutex.RLock()
-	_tags = tags
-	cotentmutex.RUnlock()
-	return _tags
+func Tags() []Tag {
+	return alltags.Load().([]Tag)
 }
 
 func ArticlesByTagPage(tag string, pageSize, pageNumber int) (total int, heads []MetaData) {
 	s := pageSize * (pageNumber - 1)
 	e := s + pageSize
 
-	var slice []int
-	var _articles []MetaData
-	cotentmutex.RLock()
-	slice = tagIndex[tag]
-	_articles = articles
-	cotentmutex.RUnlock()
-
+	_articles := allarticles.Load().([]MetaData)
+	slice := tagIndex.Load().(map[string][]int)[tag]
 	total = len(slice)
 
 	if s >= total {

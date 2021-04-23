@@ -30,7 +30,7 @@ var (
 	}
 )
 
-func Layout() error {
+func initLayoutTemplate() error {
 	// 仅在go build -tags=embed有效
 	embedStaticViews()
 

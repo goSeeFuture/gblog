@@ -4,6 +4,7 @@ import (
 	"log"
 	"sort"
 	"sync"
+	"sync/atomic"
 
 	"github.com/goSeeFuture/gblog/configs"
 )
@@ -12,11 +13,18 @@ const UncategorizedId = "uncategorized"
 const UncategorizedName = "未分类"
 
 var (
-	articles []MetaData
-	tagIndex map[string][]int
-	tags     []Tag
+	// allarticles []MetaData
+	allarticles atomic.Value
+	// articleVersion map[string]int64
+	articleVersion atomic.Value
+	// tagIndex    map[string][]int
+	tagIndex atomic.Value
+	// alltags  []Tag
+	alltags atomic.Value
+	// []configs.Category
+	allcategories atomic.Value
 
-	cotentmutex sync.RWMutex
+	reloadMutex sync.Mutex
 )
 
 func Load() {
@@ -29,27 +37,49 @@ func Load() {
 }
 
 func loadContent() (err error) {
-	cotentmutex.Lock()
-	defer cotentmutex.Unlock()
+	reloadMutex.Lock()
+	defer reloadMutex.Unlock()
 
-	err = Layout()
+	err = initLayoutTemplate()
 	if err != nil {
-		log.Println("load layout failed:", err)
+		log.Println("init layout template failed:", err)
 		return
 	}
 
-	articles = List()
+	articles := List()
+	if len(articles) == 0 {
+		articles = []MetaData{}
+	}
+
 	// 按照时间倒序
 	sort.SliceStable(articles, func(i, j int) bool {
 		return articles[i].UpdateAt.After(articles[j].UpdateAt)
 	})
+	allarticles.Store(articles)
 
-	tagIndex, tags = makeTagIndex(articles)
+	version := make(map[string]int64)
+	for _, e := range articles {
+		version[e.Filename] = e.ModifyTime.Unix()
+	}
+	articleVersion.Store(version)
+
+	tagindex, tags := makeTagIndex(articles)
+	if len(tagindex) == 0 {
+		tagindex = make(map[string][]int)
+	}
+	if len(tags) == 0 {
+		tags = []Tag{}
+	}
+
+	alltags.Store(tags)
+	tagIndex.Store(tagindex)
 
 	categories := articleCategory(articles)
 	mergeCategory(categories, configs.Setting.Categories)
-
-	configs.Setting.Categories = categories
+	if len(categories) == 0 {
+		categories = []configs.Category{}
+	}
+	allcategories.Store(categories)
 
 	return
 }

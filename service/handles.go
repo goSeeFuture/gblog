@@ -34,7 +34,7 @@ func listPage(c *fiber.Ctx) error {
 	total, heads := content.ArticlesByPage(configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
 	return content.Render(c, "list", map[string]interface{}{
-		"Categories":       configs.Setting.Categories,
+		"Categories":       content.Categories(),
 		"Title":            configs.Setting.WebsiteName,
 		"Footer":           content.Footer(),
 		"Total":            total,
@@ -46,7 +46,7 @@ func listPage(c *fiber.Ctx) error {
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
 		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.GetTags(),
+		"Tags":             content.Tags(),
 	})
 }
 
@@ -56,7 +56,7 @@ func articlePage(c *fiber.Ctx) error {
 	fmt.Println("获取文章:", filename)
 
 	bind := map[string]interface{}{
-		"Categories": configs.Setting.Categories,
+		"Categories": content.Categories(),
 		"Title":      configs.Setting.WebsiteName,
 		"Footer":     content.Footer(),
 	}
@@ -79,7 +79,7 @@ func articlePage(c *fiber.Ctx) error {
 	if err != nil {
 		log.Println("get article failed:", err)
 		return content.Render(c, "404", map[string]interface{}{
-			"Categories": configs.Setting.Categories,
+			"Categories": content.Categories(),
 			"Title":      configs.Setting.WebsiteName,
 		})
 	}
@@ -107,7 +107,7 @@ func categoryPage(c *fiber.Ctx) error {
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
 	return content.Render(c, "list", map[string]interface{}{
-		"Categories":       configs.Setting.Categories,
+		"Categories":       content.Categories(),
 		"Title":            configs.Setting.WebsiteName,
 		"Footer":           content.Footer(),
 		"Total":            total,
@@ -119,7 +119,7 @@ func categoryPage(c *fiber.Ctx) error {
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
 		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.GetTags(),
+		"Tags":             content.Tags(),
 	})
 }
 
@@ -140,7 +140,7 @@ func tagPage(c *fiber.Ctx) error {
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
 	return content.Render(c, "list", map[string]interface{}{
-		"Categories":       configs.Setting.Categories,
+		"Categories":       content.Categories(),
 		"Title":            configs.Setting.WebsiteName,
 		"Footer":           content.Footer(),
 		"Total":            total,
@@ -152,7 +152,7 @@ func tagPage(c *fiber.Ctx) error {
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
 		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.GetTags(),
+		"Tags":             content.Tags(),
 	})
 }
 

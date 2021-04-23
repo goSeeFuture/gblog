@@ -12,20 +12,18 @@ func ArticlesByCategoryPage(categoryId string, pageSize, pageNumber int) (total 
 	e := s + pageSize
 
 	isUncategorized := categoryId == UncategorizedId
-	var _articles []MetaData
-	cotentmutex.RLock()
-	_articles = articles
-	cotentmutex.RUnlock()
+	_articles := allarticles.Load().([]MetaData)
 
 	heads = []MetaData{}
 	for _, item := range _articles {
+		id := strings.ReplaceAll(categoryId, "/", "-")
 		var chioce bool
 		if isUncategorized {
-			if filepath.Dir(item.Filename) == "articles" {
+			if item.CategoryID == "" {
 				chioce = true
 			}
 		} else {
-			chioce = item.CategoryID == categoryId
+			chioce = item.CategoryID == id
 		}
 		if chioce {
 			if total >= s && total < e {
@@ -93,4 +91,8 @@ func mergeCategory(a, b []configs.Category) {
 			}
 		}
 	}
+}
+
+func Categories() []configs.Category {
+	return allcategories.Load().([]configs.Category)
 }

@@ -38,6 +38,8 @@ type MetaData struct {
 	HasMetaHead bool `yaml:"-"`
 	// 分类ID
 	CategoryID string `yaml:"-"`
+	// 文件修改时间，用于检查修改变动
+	ModifyTime time.Time `yaml:"-"`
 }
 
 // 罗列所有文章的Meta头
@@ -65,34 +67,11 @@ func List() (articles []MetaData) {
 			return nil
 		}
 
-		dir := strings.TrimPrefix(filepath.Dir(path), "articles/")
-		md := MetaData{
-			Title:      info.Name(),
-			Filename:   path,
-			CategoryID: strings.Replace(strings.TrimPrefix(dir, "/articles/"), "/", "-", -1),
-		}
-		meta, offset := getMetaData(path)
-		if meta != nil {
-			err = yaml.Unmarshal(meta, &md)
-			if err != nil {
-				return err
-			}
-			md.HasMetaHead = true
+		md, err := loadMetaData(path)
+		if err != nil {
+			return nil
 		}
 
-		head, h1, modtm := getHeadContent(path, offset)
-		if len(head) != 0 {
-			md.Summary = template.HTML(head)
-		}
-		if h1 != "" {
-			md.InlineTitle = true
-			md.Title = h1
-		}
-		if md.UpdateAt.IsZero() && !modtm.IsZero() {
-			md.UpdateAt = modtm
-		}
-
-		md.Offset = offset
 		articles = append(articles, md)
 		return nil
 	})
@@ -100,6 +79,67 @@ func List() (articles []MetaData) {
 		log.Println("foreach article failed:", err)
 	}
 	return
+}
+
+func reloadArticleMetaData(filename string) (MetaData, bool) {
+	reloadMutex.Lock()
+	defer reloadMutex.Unlock()
+
+	md, err := loadMetaData(filename)
+	if err != nil {
+		return MetaData{}, false
+	}
+
+	articles := allarticles.Load().([]MetaData)
+	for i, e := range articles {
+		if e.Filename == filename {
+			articles[i] = md
+			break
+		}
+	}
+
+	allarticles.Store(articles)
+	return md, true
+}
+
+func loadMetaData(filename string) (MetaData, error) {
+	ffilename, _ := filepath.Abs(filename)
+	prefixd, _ := filepath.Abs(configs.Setting.ArticleDir)
+	dir := filepath.Dir(ffilename)
+
+	var err error
+	md := MetaData{
+		Title:      filepath.Base(filename),
+		Filename:   filename,
+		CategoryID: strings.ReplaceAll(strings.TrimPrefix(strings.TrimPrefix(dir, prefixd), "/"), "/", "-"),
+	}
+
+	log.Println("md.CategoryID", md.CategoryID)
+
+	meta, offset := getMetaData(filename)
+	if meta != nil {
+		err = yaml.Unmarshal(meta, &md)
+		if err != nil {
+			return MetaData{}, err
+		}
+		md.HasMetaHead = true
+	}
+
+	head, h1, modtm := getHeadContent(filename, offset)
+	if len(head) != 0 {
+		md.Summary = template.HTML(head)
+	}
+	md.ModifyTime = modtm
+	if h1 != "" {
+		md.InlineTitle = true
+		md.Title = h1
+	}
+	if md.UpdateAt.IsZero() && !modtm.IsZero() {
+		md.UpdateAt = modtm
+	}
+
+	md.Offset = offset
+	return md, nil
 }
 
 func getHeadContent(filename string, offset int) ([]byte, string, time.Time) {
@@ -208,11 +248,7 @@ func ArticlesByPage(pageSize, pageNumber int) (total int, heads []MetaData) {
 	s := pageSize * (pageNumber - 1)
 	e := s + pageSize
 
-	var _articles []MetaData
-	cotentmutex.RLock()
-	_articles = articles
-	cotentmutex.RUnlock()
-
+	_articles := allarticles.Load().([]MetaData)
 	heads = []MetaData{}
 	total = len(_articles)
 	if s > total {
@@ -228,10 +264,7 @@ func ArticlesByPage(pageSize, pageNumber int) (total int, heads []MetaData) {
 }
 
 func FindMetaData(filename string) (MetaData, bool) {
-	var _articles []MetaData
-	cotentmutex.RLock()
-	_articles = articles
-	defer cotentmutex.RUnlock()
+	_articles := allarticles.Load().([]MetaData)
 	for _, e := range _articles {
 		if e.Filename == filename {
 			return e, true

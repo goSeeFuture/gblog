@@ -2,7 +2,10 @@ package content
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
+	"log"
+	"os"
 
 	"github.com/goSeeFuture/gblog/configs"
 
@@ -17,6 +20,22 @@ import (
 )
 
 func MarkdownPage(filename string, offset int) ([]byte, error) {
+	fs, err := os.Stat(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	versions := articleVersion.Load().(map[string]int64)
+	if fs.ModTime().Unix() != versions[filename] {
+		// 重新解析文章MetaData
+		md, ok := reloadArticleMetaData(filename)
+		if !ok {
+			return nil, errors.New("reload article meta data failed")
+		}
+		offset = md.Offset
+		log.Println("reload article meta data", filename)
+	}
+
 	f, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
