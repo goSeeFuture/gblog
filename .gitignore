@@ -1,4 +1,5 @@
 articles/
+articles
 *-packr.go
 gblog
 gblog_*

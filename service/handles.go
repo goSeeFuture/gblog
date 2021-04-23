@@ -59,6 +59,7 @@ func articlePage(c *fiber.Ctx) error {
 		"Categories": content.Categories(),
 		"Title":      configs.Setting.WebsiteName,
 		"Footer":     content.Footer(),
+		"Tags":       content.Tags(),
 	}
 
 	md, exist := content.FindMetaData(filename)
