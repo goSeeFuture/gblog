@@ -1,13 +1,15 @@
 {{ define "footer" }}
 
 {{ if ne .Footer `` }}
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>
-            {{ .Footer }}
-        </p>
-    </div>
-</footer>
+<section class="container">
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                {{ .Footer }}
+            </p>
+        </div>
+    </footer>
+</section>
 {{ end }}
 
 {{ end }}
