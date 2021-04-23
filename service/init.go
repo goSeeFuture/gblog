@@ -10,6 +10,8 @@ import (
 
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/session"
+
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 var (
@@ -29,10 +31,18 @@ func Mux(app *fiber.App) {
 }
 
 func setupMiddleware(app *fiber.App) {
+	// 日志中间件
+	app.Use(logger.New(logger.Config{
+		Format:     "${status} - ${method} ${path}\n",
+		TimeFormat: configs.TimeLayout,
+		TimeZone:   "Asia/Shanghai",
+	}))
+
 	embedStaticResource(app)
 	setArticleReference(app)
 	app.Use(recover.New())
 	app.Use(setFavicon(app))
+
 }
 
 func pageNumber(c *fiber.Ctx, pageKey string) int {
