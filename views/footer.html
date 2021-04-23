@@ -3,10 +3,7 @@
 <footer class="footer">
     <div class="content has-text-centered">
         <p>
-            {{ if eq .Footer `` }}
-                <strong>godan.tech</strong> by <a href="http://www.godan.tech">Godan King</a>. Use golang template and no
-            javascript.
-            {{ else }}
+            {{ if ne .Footer `` }}
                 {{ .Footer }}
             {{ end }}
         </p>

@@ -83,6 +83,10 @@ func fmtTime(t time.Time) string {
 }
 
 func Footer() template.HTML {
+	if configs.Setting.WebsiteFooter == "" {
+		return template.HTML("")
+	}
+
 	footer, err := ioutil.ReadFile(configs.Setting.WebsiteFooter)
 	if err != nil {
 		log.Println("load website footer failed:", err)
