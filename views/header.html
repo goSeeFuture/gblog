@@ -27,7 +27,9 @@
 
                     <div class="navbar-dropdown">
                         {{ range $category := .Categories }}
+                            {{ if ne $category.Count 0 }}
                             <a class="navbar-item" href="/category/{{ $category.ID }}">{{ $category.Name }} ({{ $category.Count }})</a>
+                            {{ end }}
                         {{ end }}
                     </div>
                 </div>
@@ -39,7 +41,9 @@
 
                     <div class="navbar-dropdown">
                         {{ range $tag := .Tags }}
+                            {{ if ne $tag.Count 0 }}
                             <a class="navbar-item" href="/tag/{{ $tag.Name }}">{{ $tag.Name }} ({{ $tag.Count }})</a>
+                            {{ end }}
                         {{ end }}
                     </div>
                 </div>
