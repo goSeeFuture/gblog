@@ -63,7 +63,7 @@ func markdown2HTML(data []byte) []byte {
 		extensions = append(extensions, mathjax.MathJax)
 	}
 
-	md := goldmark.New(goldmark.WithExtensions(extensions...))
+	md := goldmark.New(goldmark.WithExtensions(extensions...), goldmark.WithParserOptions(parser.WithAttribute()))
 
 	var buf bytes.Buffer
 	context := parser.NewContext()

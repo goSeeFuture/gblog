@@ -14,6 +14,9 @@ WebsiteName = "我的博客"
 # 网站页脚内容
 # 将路径指向`ArticleDir`以获得不停服加载修改的能力
 WebsiteFooter = "articles/footer.md"
+# 网站无法找到页面
+# 将路径指向`ArticleDir`以获得不停服加载修改的能力
+Website404 = "articles/404.md"
 # 显示未分类
 ShowUncategorized = true
 # 每页显示文章数

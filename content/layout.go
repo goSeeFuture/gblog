@@ -82,6 +82,26 @@ func fmtTime(t time.Time) string {
 	return t.Format(configs.TimeLayout)
 }
 
+func Page404() template.HTML {
+	if configs.Setting.Website404 == "" {
+		return template.HTML("")
+	}
+
+	p404, err := ioutil.ReadFile(configs.Setting.Website404)
+	if err != nil {
+		log.Println("load website 404 page failed:", err)
+		return template.HTML("")
+	}
+
+	data := markdown2HTML(p404)
+	if data == nil {
+		log.Println("parse website 404 page failed")
+		return template.HTML("")
+	}
+
+	return template.HTML(data)
+}
+
 func Footer() template.HTML {
 	if configs.Setting.WebsiteFooter == "" {
 		return template.HTML("")
@@ -90,13 +110,13 @@ func Footer() template.HTML {
 	footer, err := ioutil.ReadFile(configs.Setting.WebsiteFooter)
 	if err != nil {
 		log.Println("load website footer failed:", err)
-		return ""
+		return template.HTML("")
 	}
 
 	data := markdown2HTML(footer)
 	if data == nil {
 		log.Println("parse website footer failed")
-		return ""
+		return template.HTML("")
 	}
 
 	return template.HTML(data)

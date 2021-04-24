@@ -37,6 +37,9 @@ type Config struct {
 	// 网站页脚内容
 	// 将路径指向`ArticleDir`以获得不停服加载修改的能力
 	WebsiteFooter string
+	// 网站无法找到页面
+	// 将路径指向`ArticleDir`以获得不停服加载修改的能力
+	Website404 string
 }
 
 // 文章分类别名

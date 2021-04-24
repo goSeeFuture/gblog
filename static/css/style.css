@@ -1,0 +1,13 @@
+.article-title-link {
+    color: #363636;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #7a7a7a;
+}
+
+.footer {
+    background-color: #fff;
+}

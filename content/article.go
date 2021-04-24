@@ -58,6 +58,11 @@ func List() (articles []MetaData) {
 			return nil
 		}
 
+		if path == configs.Setting.Website404 {
+			// log.Println("ignore website 404 page:", path)
+			return nil
+		}
+
 		if isArticleRefDirectory(path) {
 			// 跳过引用资源目录
 			return nil

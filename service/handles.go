@@ -81,7 +81,10 @@ func articlePage(c *fiber.Ctx) error {
 		log.Println("get article failed:", err)
 		return content.Render(c, "404", map[string]interface{}{
 			"Categories": content.Categories(),
+			"Tags":       content.Tags(),
+			"Footer":     content.Footer(),
 			"Title":      configs.Setting.WebsiteName,
+			"Page404":    content.Page404(),
 		})
 	}
 	bind["Article"] = template.HTML(data)

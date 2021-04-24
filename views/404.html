@@ -1,7 +1,11 @@
 {{ define "body" }}
 
-<section class="container">
-    <h2>没有找到页面</h2>
+<section class="container has-text-centered">
+    {{ if eq .Page404 `` }}
+        <h2>没有找到页面</h2>
+    {{ else }}
+        {{ .Page404 }}
+    {{ end }}
 </section>
 
 {{ end }}
