@@ -41,8 +41,13 @@ func articleCategory(articles []MetaData) []configs.Category {
 	var categories []configs.Category
 	var articleDir = configs.Setting.ArticleDir + "/"
 	var count = make(map[string]int)
+	link := linkDir.Load().(string)
 	for _, article := range articles {
 		dir := filepath.Dir(article.Filename)
+		if link != "" {
+			dir = strings.Replace(dir, link, configs.Setting.ArticleDir, 1)
+		}
+
 		if configs.Setting.ArticleDir == dir {
 			count[UncategorizedName]++
 			continue

@@ -44,7 +44,14 @@ type MetaData struct {
 
 // 罗列所有文章的Meta头
 func List() (articles []MetaData) {
-	err := filepath.Walk(configs.Setting.ArticleDir, func(path string, info os.FileInfo, err error) error {
+	root := configs.Setting.ArticleDir
+	link, _ := os.Readlink(root)
+	linkDir.Store(link)
+	if link != "" {
+		root = link
+	}
+
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -53,13 +60,7 @@ func List() (articles []MetaData) {
 			return nil
 		}
 
-		if path == configs.Setting.WebsiteFooter {
-			// log.Println("ignore website footer:", path)
-			return nil
-		}
-
-		if path == configs.Setting.Website404 {
-			// log.Println("ignore website 404 page:", path)
+		if isSpecialArticle(path, link) {
 			return nil
 		}
 
@@ -109,7 +110,13 @@ func reloadArticleMetaData(filename string) (MetaData, bool) {
 
 func loadMetaData(filename string) (MetaData, error) {
 	ffilename, _ := filepath.Abs(filename)
-	prefixd, _ := filepath.Abs(configs.Setting.ArticleDir)
+	var articleDir = configs.Setting.ArticleDir
+	link := linkDir.Load().(string)
+	if link != "" {
+		articleDir = link
+	}
+
+	prefixd, _ := filepath.Abs(articleDir)
 	dir := filepath.Dir(ffilename)
 
 	var err error
@@ -289,6 +296,29 @@ func isArticleRefDirectory(path string) bool {
 			// 跳过引用资源目录
 			return true
 		}
+	}
+
+	return false
+}
+
+func isSpecialArticle(path, link string) bool {
+	articleDir, _ := filepath.Abs(configs.Setting.ArticleDir)
+	footerPage, _ := filepath.Abs(configs.Setting.WebsiteFooter)
+	footerPage = strings.TrimPrefix(footerPage, articleDir)
+	footerPage = filepath.Join(link, footerPage)
+
+	if path == footerPage {
+		// log.Println("ignore website footer:", path)
+		return true
+	}
+
+	p404, _ := filepath.Abs(configs.Setting.Website404)
+	p404 = strings.TrimPrefix(p404, articleDir)
+	p404 = filepath.Join(link, p404)
+
+	if path == p404 {
+		// log.Println("ignore website 404 page:", path)
+		return true
 	}
 
 	return false
