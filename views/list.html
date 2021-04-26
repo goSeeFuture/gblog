@@ -11,11 +11,17 @@
         <div class="content">
           <p>{{ $article.Summary }}</p>
         </div>
-        <p>最后修改于：{{ FormatTime .UpdateAt }}</p>
-        <div class="tags is-pulled-right">
-          {{ range $tag := .Tags }}
-          <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
-          {{ end }}
+        <div class="columns">
+          <div class="column">
+            <p>最后修改于：{{ FormatTime .UpdateAt }}</p>
+          </div>
+        </div>
+        <div class="columns is-pulled-right">
+          <div class="tags">
+            {{ range $tag := .Tags }}
+            <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
+            {{ end }}
+          </div>
         </div>
       </article>
     </div>
