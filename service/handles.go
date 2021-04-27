@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -20,6 +19,26 @@ func homePage(c *fiber.Ctx) error {
 	return c.Redirect("/list", http.StatusFound)
 }
 
+// 页头，页脚等公共数据
+// 以覆盖的方式修改
+func frame(c *fiber.Ctx) map[string]interface{} {
+	return map[string]interface{}{
+		"Title":         configs.Setting.WebsiteName,
+		"Categories":    content.Categories(),
+		"Tags":          content.Tags(),
+		"Footer":        content.Footer(),
+		"EnableMathJax": configs.Setting.ArticleMathJax,
+	}
+}
+
+// 合并b到a
+func mergeBind(a, b map[string]interface{}) map[string]interface{} {
+	for k, v := range b {
+		a[k] = v
+	}
+	return a
+}
+
 func listPage(c *fiber.Ctx) error {
 	var curPage int
 	page := c.Params("page")
@@ -33,10 +52,7 @@ func listPage(c *fiber.Ctx) error {
 
 	total, heads := content.ArticlesByPage(configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
-	return content.Render(c, "list", map[string]interface{}{
-		"Categories":       content.Categories(),
-		"Title":            configs.Setting.WebsiteName,
-		"Footer":           content.Footer(),
+	bind := map[string]interface{}{
 		"Total":            total,
 		"Pages":            pages(maxPage, curPage),
 		"CurPage":          strconv.Itoa(curPage),
@@ -45,22 +61,16 @@ func listPage(c *fiber.Ctx) error {
 		"PrevPage":         prevPage(maxPage, curPage),
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
-		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.Tags(),
-	})
+	}
+	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
 
 func articlePage(c *fiber.Ctx) error {
 	filename := filepath.Join(configs.Setting.AbsArticleDir, c.Params("*"))
 	filename, _ = url.QueryUnescape(filename)
-	fmt.Println("获取文章:", filename)
+	log.Println("获取文章:", filename)
 
-	bind := map[string]interface{}{
-		"Categories": content.Categories(),
-		"Title":      configs.Setting.WebsiteName,
-		"Footer":     content.Footer(),
-		"Tags":       content.Tags(),
-	}
+	bind := make(map[string]interface{})
 
 	md, exist := content.FindMetaData(filename)
 	if exist {
@@ -88,9 +98,8 @@ func articlePage(c *fiber.Ctx) error {
 		})
 	}
 	bind["Article"] = template.HTML(data)
-	bind["EnableMathJax"] = configs.Setting.ArticleMathJax
 
-	return content.Render(c, "article", bind)
+	return content.Render(c, "article", mergeBind(frame(c), bind))
 }
 
 func categoryPage(c *fiber.Ctx) error {
@@ -110,10 +119,7 @@ func categoryPage(c *fiber.Ctx) error {
 	total, heads := content.ArticlesByCategoryPage(categoryId, configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
-	return content.Render(c, "list", map[string]interface{}{
-		"Categories":       content.Categories(),
-		"Title":            configs.Setting.WebsiteName,
-		"Footer":           content.Footer(),
+	bind := map[string]interface{}{
 		"Total":            total,
 		"Pages":            pages(maxPage, curPage),
 		"CurPage":          strconv.Itoa(curPage),
@@ -122,9 +128,8 @@ func categoryPage(c *fiber.Ctx) error {
 		"PrevPage":         prevPage(maxPage, curPage),
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
-		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.Tags(),
-	})
+	}
+	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
 
 func tagPage(c *fiber.Ctx) error {
@@ -143,10 +148,7 @@ func tagPage(c *fiber.Ctx) error {
 	total, heads := content.ArticlesByTagPage(tag, configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
-	return content.Render(c, "list", map[string]interface{}{
-		"Categories":       content.Categories(),
-		"Title":            configs.Setting.WebsiteName,
-		"Footer":           content.Footer(),
+	bind := map[string]interface{}{
 		"Total":            total,
 		"Pages":            pages(maxPage, curPage),
 		"CurPage":          strconv.Itoa(curPage),
@@ -155,9 +157,8 @@ func tagPage(c *fiber.Ctx) error {
 		"PrevPage":         prevPage(maxPage, curPage),
 		"NextPage":         nextPage(maxPage, curPage),
 		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
-		"EnableMathJax":    configs.Setting.ArticleMathJax,
-		"Tags":             content.Tags(),
-	})
+	}
+	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
 
 func maxPage(total int, pageSize int) int {
