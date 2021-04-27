@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"strconv"
 	"sync"
 	"time"
@@ -83,11 +84,11 @@ func fmtTime(t time.Time) string {
 }
 
 func Page404() template.HTML {
-	if configs.Setting.Website404 == "" {
+	if !configs.Setting.CustomWebsite404 {
 		return template.HTML("")
 	}
 
-	p404, err := ioutil.ReadFile(configs.Setting.Website404)
+	p404, err := ioutil.ReadFile(filepath.Join(configs.Setting.AbsArticleDir, configs.CustomPage404))
 	if err != nil {
 		log.Println("load website 404 page failed:", err)
 		return template.HTML("")
@@ -103,11 +104,11 @@ func Page404() template.HTML {
 }
 
 func Footer() template.HTML {
-	if configs.Setting.WebsiteFooter == "" {
+	if !configs.Setting.CustomWebsiteFooter {
 		return template.HTML("")
 	}
 
-	footer, err := ioutil.ReadFile(configs.Setting.WebsiteFooter)
+	footer, err := ioutil.ReadFile(filepath.Join(configs.Setting.AbsArticleDir, configs.CustomPageFooter))
 	if err != nil {
 		log.Println("load website footer failed:", err)
 		return template.HTML("")

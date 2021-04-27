@@ -1,6 +1,7 @@
 package content
 
 import (
+	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -39,21 +40,26 @@ func ArticlesByCategoryPage(categoryId string, pageSize, pageNumber int) (total 
 func articleCategory(articles []MetaData) []configs.Category {
 	var unique = make(map[string]bool)
 	var categories []configs.Category
-	var articleDir = configs.Setting.ArticleDir + "/"
 	var count = make(map[string]int)
-	link := linkDir.Load().(string)
 	for _, article := range articles {
 		dir := filepath.Dir(article.Filename)
-		if link != "" {
-			dir = strings.Replace(dir, link, configs.Setting.ArticleDir, 1)
-		}
 
-		if configs.Setting.ArticleDir == dir {
+		if configs.Setting.AbsArticleDir == dir {
 			count[UncategorizedName]++
 			continue
 		}
 
-		dir = strings.TrimPrefix(dir, articleDir)
+		fmt.Println("cate1", dir)
+		dir = strings.TrimPrefix(dir, configs.Setting.ArticleDir)
+		if dir != "" && dir[0] == filepath.Separator {
+			dir = dir[1:]
+		}
+		if dir == "" {
+			continue
+		}
+		fmt.Println("cate2", dir)
+		fmt.Println("AbsArticleDir", configs.Setting.AbsArticleDir)
+
 		cate := configs.Category{
 			Path: dir,
 			Name: dir,

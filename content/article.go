@@ -44,14 +44,14 @@ type MetaData struct {
 
 // 罗列所有文章的Meta头
 func List() (articles []MetaData) {
-	root := configs.Setting.ArticleDir
-	link, _ := os.Readlink(root)
-	linkDir.Store(link)
+	link, _ := os.Readlink(configs.Setting.ArticleDir)
 	if link != "" {
-		root = link
+		configs.Setting.AbsArticleDir = link
+	} else {
+		configs.Setting.AbsArticleDir, _ = filepath.Abs(configs.Setting.ArticleDir)
 	}
 
-	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(configs.Setting.AbsArticleDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -60,11 +60,11 @@ func List() (articles []MetaData) {
 			return nil
 		}
 
-		if isSpecialArticle(path, link) {
+		if isSpecialArticle(path) {
 			return nil
 		}
 
-		if isArticleRefDirectory(path) {
+		if isArticleRefDirectory(path, link) {
 			// 跳过引用资源目录
 			return nil
 		}
@@ -109,24 +109,25 @@ func reloadArticleMetaData(filename string) (MetaData, bool) {
 }
 
 func loadMetaData(filename string) (MetaData, error) {
-	ffilename, _ := filepath.Abs(filename)
-	var articleDir = configs.Setting.ArticleDir
-	link := linkDir.Load().(string)
-	if link != "" {
-		articleDir = link
+	dir := filepath.Dir(filename)
+	dir = strings.TrimPrefix(strings.TrimPrefix(dir, configs.Setting.AbsArticleDir), "/")
+	if dir != "" && dir[0] == filepath.Separator {
+		dir = dir[1:]
 	}
 
-	prefixd, _ := filepath.Abs(articleDir)
-	dir := filepath.Dir(ffilename)
+	file := strings.TrimPrefix(strings.TrimPrefix(filename, configs.Setting.AbsArticleDir), "/")
+	if file != "" && file[0] == filepath.Separator {
+		file = file[1:]
+	}
+	file = filepath.Join(configs.Setting.ArticleDir, file)
+	file = filepath.ToSlash(file)
 
 	var err error
 	md := MetaData{
 		Title:      filepath.Base(filename),
-		Filename:   filename,
-		CategoryID: strings.ReplaceAll(strings.TrimPrefix(strings.TrimPrefix(dir, prefixd), "/"), "/", "-"),
+		Filename:   file,
+		CategoryID: strings.ReplaceAll(dir, "/", "-"),
 	}
-
-	log.Println("md.CategoryID", md.CategoryID)
 
 	meta, offset := getMetaData(filename)
 	if meta != nil {
@@ -285,15 +286,16 @@ func FindMetaData(filename string) (MetaData, bool) {
 	return MetaData{}, false
 }
 
-func isArticleRefDirectory(path string) bool {
-	if strings.HasPrefix(path, configs.Setting.ArticleReferenceDir) {
-		// 跳过引用资源目录
-		return true
-	}
+func isArticleRefDirectory(path, link string) bool {
+	path, _ = filepath.Abs(path)
 
-	for _, dir := range configs.Setting.ArticleReferenceDirs {
+	refdir := []string{configs.Setting.ArticleReferenceDir}
+	refdir = append(refdir, configs.Setting.ArticleReferenceDirs...)
+	for _, dir := range refdir {
+		dir, _ = filepath.Abs(dir)
 		if strings.HasPrefix(path, dir) {
 			// 跳过引用资源目录
+			log.Println("跳过引用资源目录", path)
 			return true
 		}
 	}
@@ -301,24 +303,26 @@ func isArticleRefDirectory(path string) bool {
 	return false
 }
 
-func isSpecialArticle(path, link string) bool {
-	articleDir, _ := filepath.Abs(configs.Setting.ArticleDir)
-	footerPage, _ := filepath.Abs(configs.Setting.WebsiteFooter)
-	footerPage = strings.TrimPrefix(footerPage, articleDir)
-	footerPage = filepath.Join(link, footerPage)
-
-	if path == footerPage {
-		// log.Println("ignore website footer:", path)
-		return true
+func isSpecialArticle(path string) bool {
+	path = strings.TrimPrefix(path, configs.Setting.AbsArticleDir)
+	if path != "" && path[0] == filepath.Separator {
+		path = path[1:]
 	}
 
-	p404, _ := filepath.Abs(configs.Setting.Website404)
-	p404 = strings.TrimPrefix(p404, articleDir)
-	p404 = filepath.Join(link, p404)
+	var custompages []string
+	if configs.Setting.CustomWebsiteFooter {
+		custompages = append(custompages, configs.CustomPageFooter)
+	}
 
-	if path == p404 {
-		// log.Println("ignore website 404 page:", path)
-		return true
+	if configs.Setting.CustomWebsite404 {
+		custompages = append(custompages, configs.CustomPage404)
+	}
+
+	for _, e := range custompages {
+		if path == e {
+			log.Println("ignore custom page:", path)
+			return true
+		}
 	}
 
 	return false

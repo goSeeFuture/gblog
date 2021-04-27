@@ -41,7 +41,7 @@ func watchArticleChange() {
 		}
 	}()
 
-	err = watcher.Add(configs.Setting.ArticleDir)
+	err = watcher.Add(configs.Setting.AbsArticleDir)
 	if err != nil {
 		log.Println("cannot watch article dir:", err)
 		return

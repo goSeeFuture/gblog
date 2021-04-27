@@ -25,9 +25,6 @@ var (
 	allcategories atomic.Value
 
 	reloadMutex sync.Mutex
-
-	// linkDir string
-	linkDir atomic.Value
 )
 
 func Load() {

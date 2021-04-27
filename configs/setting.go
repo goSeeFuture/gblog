@@ -10,6 +10,8 @@ type Config struct {
 	Listen string
 	// 文章目录
 	ArticleDir string
+	// 文章目录绝对路径
+	AbsArticleDir string `toml:"-"`
 	// 文章中引用资源路径，比如图片
 	ArticleReferenceDir string
 	// 文章中引用资源路径，比如图片
@@ -35,11 +37,11 @@ type Config struct {
 	// 文章支持MathJax，详情参见：https://github.com/litao91/goldmark-mathjax
 	ArticleMathJax bool
 	// 网站页脚内容
-	// 将路径指向`ArticleDir`以获得不停服加载修改的能力
-	WebsiteFooter string
+	// 需要实现`ArticleDir`/footer.md
+	CustomWebsiteFooter bool
 	// 网站无法找到页面
-	// 将路径指向`ArticleDir`以获得不停服加载修改的能力
-	Website404 string
+	// 需要实现`ArticleDir`/404.md
+	CustomWebsite404 bool
 }
 
 // 文章分类别名

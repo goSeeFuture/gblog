@@ -7,6 +7,10 @@ import (
 )
 
 const TimeLayout = "2006-01-02 15:04:05"
+const (
+	CustomPage404    = "404.md"
+	CustomPageFooter = "footer.md"
+)
 
 func Load() {
 	tree, err := toml.LoadFile("config.toml")

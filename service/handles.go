@@ -51,7 +51,7 @@ func listPage(c *fiber.Ctx) error {
 }
 
 func articlePage(c *fiber.Ctx) error {
-	filename := filepath.Join(configs.Setting.ArticleDir, c.Params("*"))
+	filename := filepath.Join(configs.Setting.AbsArticleDir, c.Params("*"))
 	filename, _ = url.QueryUnescape(filename)
 	fmt.Println("获取文章:", filename)
 
