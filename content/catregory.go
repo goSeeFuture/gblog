@@ -1,7 +1,6 @@
 package content
 
 import (
-	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -49,7 +48,6 @@ func articleCategory(articles []MetaData) []configs.Category {
 			continue
 		}
 
-		fmt.Println("cate1", dir)
 		dir = strings.TrimPrefix(dir, configs.Setting.ArticleDir)
 		if dir != "" && dir[0] == filepath.Separator {
 			dir = dir[1:]
@@ -57,8 +55,6 @@ func articleCategory(articles []MetaData) []configs.Category {
 		if dir == "" {
 			continue
 		}
-		fmt.Println("cate2", dir)
-		fmt.Println("AbsArticleDir", configs.Setting.AbsArticleDir)
 
 		cate := configs.Category{
 			Path: dir,
