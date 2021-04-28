@@ -1,16 +1,17 @@
 # gblog
 
-本想自己搭建个博客，写写文章，但找来找去发现都比较麻烦，想到自己后期可能会改改，遂自制一个。
-本人比较懒，所以博客也得符合懒人的审美，那就是必须简单。
+gblog是一个基于Markdown文档构建个人博客的服务，其设计意图是，让使用者付出尽可能少的理解成本，自建博客，使用个人博客。
+为了达成愿景，gblog假设使用者只会编辑Markdown文件，和基本的电脑知识，包括：知道文件、目录、编辑文本文件、运行程序。
 
-如果你想自己搭建一个博客，不妨试试它，只需要你写Markdown文档。
+![gblog工作流程](/docs/assets/image/gblog_process.png)
 
-特点：
+## 功能介绍
 
-- 只要会写Markdown就能用好它
-- 没有数据库、没有javascript，只有golang
-- 提供丰富的配置，如果你想改变默认外观，那么试试配置它
-- 可以使用，但还在开发中，因为它还能更简单……
+- 基于Markdown文档的博文
+- 基于目录路径的博文分类
+- 博文多支持标签，查询包含指定标签的博文
+- 监视博文目录，动态加载变更
+- 采用Markdown自定义页脚、404页
 
 ## 使用说明
 
@@ -33,5 +34,6 @@
 - [go-toml](github.com/pelletier/go-toml)
 - [etree](github.com/beevik/etree)
 - [chroma](github.com/alecthomas/chroma)
+- [fsnotify](github.com/fsnotify/fsnotify)
 
-正是因为你们的的付出，才让我这个懒人能用三天写了这个博客项目，谢谢你们~
+正是因为你们的的付出，才有了这个博客项目，谢谢！

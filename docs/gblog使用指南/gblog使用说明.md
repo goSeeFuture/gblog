@@ -174,20 +174,36 @@ WebsiteName = "牛莫旺的窝窝"
 
 > 在配置文件config.toml中，#号以及后面的文字都被视为注释，gblog会忽略它们。
 
-### 设置站点页脚
+### 自定义页脚
 
-消注释`WebsiteFooter`项的注释，然后重启gblog服务。
+设置`CustomWebsiteFooter`项的的值为`true`，然后重启gblog服务。
 
 ```toml
 # 网站页脚内容
-# 将路径指向`ArticleDir`以获得不停服加载修改的能力
-WebsiteFooter = "articles/footer.md" # 去掉行首的#号，以取消注释
+# 需要实现`ArticleDir`/footer.md 
+CustomWebsiteFooter = true
 ```
 
 新建文件`articles/footer.md`，并写入页脚显示的内容，比如：
 
 ```md
 欢迎您访问 **[牛莫旺的窝窝](http://youdomain.com)** ，想寻求合作请联系 <email>niumowang@qq.com</email>
+```
+
+### 设置404页
+
+设置`CustomWebsite404`项的的值为`true`，然后重启gblog服务。
+
+```toml
+# 网站无法找到页面
+# 需要实现`ArticleDir`/404.md
+CustomWebsite404 = true
+```
+
+新建文件`articles/404.md`，并写入内容，比如：
+
+```md
+## 抱歉，无法找到该页面！
 ```
 
 ### 修改Logo与收藏图标
