@@ -224,10 +224,10 @@ func getMetaData(filename string) ([]byte, int) {
 	}
 
 	var data []byte
-	if fs.Size() < int64(configs.Setting.MaxMetaDataLen) {
+	if fs.Size() < int64(configs.MaxMetaDataLen) {
 		data = make([]byte, fs.Size())
 	} else {
-		data = make([]byte, configs.Setting.MaxMetaDataLen)
+		data = make([]byte, configs.MaxMetaDataLen)
 	}
 
 	_, err = file.Read(data)

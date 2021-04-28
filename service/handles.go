@@ -7,7 +7,6 @@ import (
 	"net/url"
 	"path/filepath"
 	"strconv"
-	"strings"
 
 	"github.com/goSeeFuture/gblog/configs"
 	"github.com/goSeeFuture/gblog/content"
@@ -53,14 +52,13 @@ func listPage(c *fiber.Ctx) error {
 	total, heads := content.ArticlesByPage(configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
 	bind := map[string]interface{}{
-		"Total":            total,
-		"Pages":            pages(maxPage, curPage),
-		"CurPage":          strconv.Itoa(curPage),
-		"Articles":         heads,
-		"ListType":         "list",
-		"PrevPage":         prevPage(maxPage, curPage),
-		"NextPage":         nextPage(maxPage, curPage),
-		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
+		"Total":    total,
+		"Pages":    pages(maxPage, curPage),
+		"CurPage":  strconv.Itoa(curPage),
+		"Articles": heads,
+		"ListType": "list",
+		"PrevPage": prevPage(maxPage, curPage),
+		"NextPage": nextPage(maxPage, curPage),
 	}
 	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
@@ -120,14 +118,13 @@ func categoryPage(c *fiber.Ctx) error {
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
 	bind := map[string]interface{}{
-		"Total":            total,
-		"Pages":            pages(maxPage, curPage),
-		"CurPage":          strconv.Itoa(curPage),
-		"Articles":         heads,
-		"ListType":         "category/" + categoryId,
-		"PrevPage":         prevPage(maxPage, curPage),
-		"NextPage":         nextPage(maxPage, curPage),
-		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
+		"Total":    total,
+		"Pages":    pages(maxPage, curPage),
+		"CurPage":  strconv.Itoa(curPage),
+		"Articles": heads,
+		"ListType": "category/" + categoryId,
+		"PrevPage": prevPage(maxPage, curPage),
+		"NextPage": nextPage(maxPage, curPage),
 	}
 	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
@@ -149,14 +146,13 @@ func tagPage(c *fiber.Ctx) error {
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
 	bind := map[string]interface{}{
-		"Total":            total,
-		"Pages":            pages(maxPage, curPage),
-		"CurPage":          strconv.Itoa(curPage),
-		"Articles":         heads,
-		"ListType":         "tag/" + tag,
-		"PrevPage":         prevPage(maxPage, curPage),
-		"NextPage":         nextPage(maxPage, curPage),
-		"PageNumberPrefix": configs.Setting.PageNumberPrefix,
+		"Total":    total,
+		"Pages":    pages(maxPage, curPage),
+		"CurPage":  strconv.Itoa(curPage),
+		"Articles": heads,
+		"ListType": "tag/" + tag,
+		"PrevPage": prevPage(maxPage, curPage),
+		"NextPage": nextPage(maxPage, curPage),
 	}
 	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
@@ -231,15 +227,10 @@ func prevPage(maxPage, curPage int) string {
 }
 
 func getPageNumber(s string) int {
-	if len(s) < 1+len(configs.Setting.PageNumberPrefix) {
+	if len(s) < 1 {
 		return 0
 	}
 
-	if configs.Setting.PageNumberPrefix != "" && !strings.HasPrefix(s, configs.Setting.PageNumberPrefix) {
-		return 0
-	}
-
-	s = strings.TrimPrefix(s, configs.Setting.PageNumberPrefix)
 	var err error
 	page, err := strconv.Atoi(s)
 	if err != nil {

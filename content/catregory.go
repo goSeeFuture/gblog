@@ -72,7 +72,7 @@ func articleCategory(articles []MetaData) []configs.Category {
 	}
 
 	// 添加未分类条目
-	if configs.Setting.ShowUncategorized {
+	if configs.ShowUncategorized {
 		categories = append(categories, configs.Category{
 			Name: UncategorizedName,
 			Path: UncategorizedId,
