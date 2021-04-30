@@ -7,6 +7,7 @@ import (
 	"log"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -39,6 +40,7 @@ func initLayoutTemplate() error {
 		t := template.New(e.Name).Funcs(template.FuncMap{
 			"IsDigit":    isDigit,
 			"FormatTime": fmtTime,
+			"HasPrefix":  hasPrefix,
 		})
 		t = parseTemplate(t, e)
 		if t == nil {
@@ -121,4 +123,8 @@ func Footer() template.HTML {
 	}
 
 	return template.HTML(data)
+}
+
+func hasPrefix(s string, prefix string) bool {
+	return strings.HasPrefix(s, prefix)
 }

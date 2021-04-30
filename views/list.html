@@ -1,5 +1,24 @@
 {{ define "body" }}
 
+{{ if  HasPrefix .ListType `category`  }}
+{{ if ne .Category.TopicTitle `` }}
+<section class="container">
+  <div class="tile is-ancestor">
+    <div class="tile is-parent">
+      <article class="tile is-child box is-full notification has-background-info-light">
+        <br />
+        <p class="title">#{{ .Category.TopicTitle }}</p>
+        <div class="content">
+          {{ .Category.Topic }}
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}
+
+
 <section class="container">
 
   {{ range $article := .Articles }}

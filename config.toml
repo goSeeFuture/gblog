@@ -20,6 +20,9 @@ CustomWebsiteFooter = true
 CustomWebsite404 = true
 # 每页显示文章数
 PageSize = 3
+# 为分类书写主题介绍
+# 需要实现`ArticleDir`/分类/topic.md
+CategoryTopic = true
 # 定义文章分类别名
 # 定义多个Cateory，Path重复将产生覆盖
 # [[Category]]

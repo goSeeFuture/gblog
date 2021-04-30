@@ -115,11 +115,14 @@ func categoryPage(c *fiber.Ctx) error {
 	total, heads := content.ArticlesByCategoryPage(categoryId, configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
+	category, _ := content.GetCategory(categoryId)
+
 	bind := map[string]interface{}{
 		"Total":    total,
 		"Pages":    pages(maxPage, curPage),
 		"CurPage":  strconv.Itoa(curPage),
 		"Articles": heads,
+		"Category": category,
 		"ListType": "category/" + categoryId,
 		"PrevPage": prevPage(maxPage, curPage),
 		"NextPage": nextPage(maxPage, curPage),

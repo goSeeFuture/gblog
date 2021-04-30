@@ -103,3 +103,22 @@ func mergeCategory(a, b []configs.Category) {
 func Categories() []configs.Category {
 	return allcategories.Load().([]configs.Category)
 }
+
+func GetCategory(categoryId string) (configs.Category, bool) {
+	index := indexOfCategory(categoryId)
+	if index == -1 {
+		return configs.Category{}, false
+	}
+
+	return allcategories.Load().([]configs.Category)[index], true
+}
+
+func indexOfCategory(categoryId string) int {
+	for i, e := range allcategories.Load().([]configs.Category) {
+		if e.ID == categoryId {
+			return i
+		}
+	}
+
+	return -1
+}

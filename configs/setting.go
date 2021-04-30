@@ -1,5 +1,7 @@
 package configs
 
+import "html/template"
+
 var (
 	Setting Config
 )
@@ -35,6 +37,9 @@ type Config struct {
 	// 网站无法找到页面
 	// 需要实现`ArticleDir`/404.md
 	CustomWebsite404 bool
+	// 为分类书写主题介绍
+	// 需要实现`ArticleDir`/分类/topic.md
+	CategoryTopic bool
 
 	// 文章分类别名
 	Categories []Category `toml:"Category"`
@@ -50,4 +55,8 @@ type Category struct {
 	ID string `toml:"-"`
 	// 文章数量
 	Count int `toml:"-"`
+	// 分类主题介绍
+	Topic template.HTML `toml:"-"`
+	// 分类主题标题
+	TopicTitle string `toml:"-"`
 }

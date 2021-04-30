@@ -1,6 +1,7 @@
 package content
 
 import (
+	"html/template"
 	"log"
 	"sort"
 	"sync"
@@ -51,6 +52,18 @@ func loadContent() (err error) {
 		articles = []MetaData{}
 	}
 
+	// 区分出主题介绍
+	var t1 []MetaData
+	var t2 = make(map[string]MetaData)
+	for _, article := range articles {
+		if article.isCategoryTopic {
+			t2[article.CategoryID] = article
+		} else {
+			t1 = append(t1, article)
+		}
+	}
+	articles = t1
+
 	// 按照时间倒序
 	sort.SliceStable(articles, func(i, j int) bool {
 		return articles[i].UpdateAt.After(articles[j].UpdateAt)
@@ -79,6 +92,20 @@ func loadContent() (err error) {
 	if len(categories) == 0 {
 		categories = []configs.Category{}
 	}
+
+	for i, category := range categories {
+		md, exist := t2[category.ID]
+		if !exist {
+			continue
+		}
+		category.Topic = template.HTML(md.Summary)
+		category.TopicTitle = md.Title
+		if category.TopicTitle == "" {
+			category.TopicTitle = category.Name
+		}
+		categories[i] = category
+	}
+
 	allcategories.Store(categories)
 
 	return

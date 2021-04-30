@@ -40,6 +40,9 @@ type MetaData struct {
 	CategoryID string `yaml:"-"`
 	// 文件修改时间，用于检查修改变动
 	ModifyTime time.Time `yaml:"-"`
+
+	// 分类主题介绍
+	isCategoryTopic bool
 }
 
 // 罗列所有文章的Meta头
@@ -138,11 +141,12 @@ func loadMetaData(filename string) (MetaData, error) {
 		md.HasMetaHead = true
 	}
 
-	head, h1, modtm := getHeadContent(filename, offset)
+	head, h1, modtm, istopic := getHeadContent(filename, offset)
 	if len(head) != 0 {
 		md.Summary = template.HTML(head)
 	}
 	md.ModifyTime = modtm
+	md.isCategoryTopic = istopic
 	if h1 != "" {
 		md.InlineTitle = true
 		md.Title = h1
@@ -155,18 +159,18 @@ func loadMetaData(filename string) (MetaData, error) {
 	return md, nil
 }
 
-func getHeadContent(filename string, offset int) ([]byte, string, time.Time) {
+func getHeadContent(filename string, offset int) ([]byte, string, time.Time, bool) {
 	file, err := os.OpenFile(filename, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		log.Println("open article file failed:", err)
-		return nil, "", time.Time{}
+		return nil, "", time.Time{}, false
 	}
 	defer file.Close()
 
 	_, err = file.Seek(int64(offset), io.SeekStart)
 	if err != nil {
 		log.Println("read seek article file failed:", err)
-		return nil, "", time.Time{}
+		return nil, "", time.Time{}, false
 	}
 
 	const headPartSize int64 = 256
@@ -174,11 +178,12 @@ func getHeadContent(filename string, offset int) ([]byte, string, time.Time) {
 	fs, err := file.Stat()
 	if err != nil {
 		log.Println("get article file head failed:", err)
-		return nil, "", time.Time{}
+		return nil, "", time.Time{}, false
 	}
 
+	var istopic = configs.Setting.CategoryTopic && filepath.Base(filename) == "topic.md"
 	var isPart = fs.Size() >= headPartSize
-	if isPart {
+	if !istopic && isPart {
 		readsize = headPartSize
 	} else {
 		readsize = fs.Size()
@@ -188,7 +193,7 @@ func getHeadContent(filename string, offset int) ([]byte, string, time.Time) {
 	partsize, err := file.Read(part)
 	if err != nil && err != io.EOF {
 		log.Println("get article file head failed:", err)
-		return nil, "", time.Time{}
+		return nil, "", time.Time{}, false
 	}
 
 	part = part[:partsize]
@@ -201,12 +206,12 @@ func getHeadContent(filename string, offset int) ([]byte, string, time.Time) {
 		}
 	}
 
-	if isPart {
+	if !istopic && isPart {
 		part = append(part, []byte("...")...)
 	}
 
 	header, h1 := removeH1(markdown2HTML(part))
-	return header, h1, fs.ModTime()
+	return header, h1, fs.ModTime(), istopic
 }
 
 func getMetaData(filename string) ([]byte, int) {
