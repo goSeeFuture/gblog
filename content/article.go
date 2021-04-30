@@ -277,9 +277,13 @@ func ArticlesByPage(pageSize, pageNumber int) (total int, heads []MetaData) {
 }
 
 func FindMetaData(filename string) (MetaData, bool) {
-	_articles := allarticles.Load().([]MetaData)
-	for _, e := range _articles {
-		if e.Filename == filename {
+	for _, e := range allarticles.Load().([]MetaData) {
+		dir := strings.TrimSuffix(e.Filename, filename)
+		if dir != "" && dir[len(dir)-1] == filepath.Separator {
+			dir = dir[:len(dir)-1]
+		}
+
+		if dir == configs.Setting.ArticleDir {
 			return e, true
 		}
 	}

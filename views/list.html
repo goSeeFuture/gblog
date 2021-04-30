@@ -37,7 +37,7 @@
       <li>
         {{ if IsDigit $page }}
         <a class="pagination-link {{ if eq $page $.CurPage }} {{ `is-current` }} {{ end }}"
-          href="{{ printf `/%s/%s%s`  $.ListType $.PageNumberPrefix $page }}">{{ $page }}</a>
+          href="{{ printf `/%s/%s`  $.ListType $page }}">{{ $page }}</a>
         {{ else }}
         <span class="pagination-ellipsis">{{ $page }}</span>
         {{ end}}

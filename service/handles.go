@@ -64,13 +64,14 @@ func listPage(c *fiber.Ctx) error {
 }
 
 func articlePage(c *fiber.Ctx) error {
-	filename := filepath.Join(configs.Setting.AbsArticleDir, c.Params("*"))
-	filename, _ = url.QueryUnescape(filename)
+	article := c.Params("*")
+	article, _ = url.QueryUnescape(article)
+	filename := filepath.Join(configs.Setting.AbsArticleDir, article)
 	log.Println("获取文章:", filename)
 
 	bind := make(map[string]interface{})
 
-	md, exist := content.FindMetaData(filename)
+	md, exist := content.FindMetaData(article)
 	if exist {
 		bind["Title"] = md.Title
 		bind["ArticleTags"] = md.Tags
@@ -87,13 +88,10 @@ func articlePage(c *fiber.Ctx) error {
 	data, err := content.MarkdownPage(filename, md.Offset)
 	if err != nil {
 		log.Println("get article failed:", err)
-		return content.Render(c, "404", map[string]interface{}{
-			"Categories": content.Categories(),
-			"Tags":       content.Tags(),
-			"Footer":     content.Footer(),
-			"Title":      configs.Setting.WebsiteName,
-			"Page404":    content.Page404(),
-		})
+
+		return content.Render(c, "404", mergeBind(frame(c), map[string]interface{}{
+			"Page404": content.Page404(),
+		}))
 	}
 	bind["Article"] = template.HTML(data)
 
