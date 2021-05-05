@@ -40,7 +40,9 @@ func setupMiddleware(app *fiber.App) {
 
 	embedStaticResource(app)
 	setArticleReference(app)
-	app.Use(recover.New())
+	app.Use(recover.New(recover.Config{
+		EnableStackTrace: true,
+	}))
 	app.Use(setFavicon(app))
 
 }
