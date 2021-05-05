@@ -51,14 +51,16 @@ func listPage(c *fiber.Ctx) error {
 
 	total, heads := content.ArticlesByPage(configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
+	listtype := "list"
+
 	bind := map[string]interface{}{
 		"Total":    total,
 		"Pages":    pages(maxPage, curPage),
 		"CurPage":  strconv.Itoa(curPage),
 		"Articles": heads,
-		"ListType": "list",
-		"PrevPage": prevPage(maxPage, curPage),
-		"NextPage": nextPage(maxPage, curPage),
+		"ListType": listtype,
+		"PrevPage": prevPage(maxPage, curPage, listtype),
+		"NextPage": nextPage(maxPage, curPage, listtype),
 	}
 	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
@@ -117,15 +119,16 @@ func categoryPage(c *fiber.Ctx) error {
 
 	category, _ := content.GetCategory(categoryId)
 
+	listtype := "category/" + categoryId
 	bind := map[string]interface{}{
 		"Total":    total,
 		"Pages":    pages(maxPage, curPage),
 		"CurPage":  strconv.Itoa(curPage),
 		"Articles": heads,
 		"Category": category,
-		"ListType": "category/" + categoryId,
-		"PrevPage": prevPage(maxPage, curPage),
-		"NextPage": nextPage(maxPage, curPage),
+		"ListType": listtype,
+		"PrevPage": prevPage(maxPage, curPage, listtype),
+		"NextPage": nextPage(maxPage, curPage, listtype),
 	}
 	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
@@ -146,14 +149,15 @@ func tagPage(c *fiber.Ctx) error {
 	total, heads := content.ArticlesByTagPage(tag, configs.Setting.PageSize, curPage)
 	maxPage := maxPage(total, configs.Setting.PageSize)
 
+	listtype := "tag/" + tag
 	bind := map[string]interface{}{
 		"Total":    total,
 		"Pages":    pages(maxPage, curPage),
 		"CurPage":  strconv.Itoa(curPage),
 		"Articles": heads,
-		"ListType": "tag/" + tag,
-		"PrevPage": prevPage(maxPage, curPage),
-		"NextPage": nextPage(maxPage, curPage),
+		"ListType": listtype,
+		"PrevPage": prevPage(maxPage, curPage, listtype),
+		"NextPage": nextPage(maxPage, curPage, listtype),
 	}
 	return content.Render(c, "list", mergeBind(frame(c), bind))
 }
@@ -211,20 +215,20 @@ func pages(maxPage, curPage int) []string {
 	return pg
 }
 
-func nextPage(maxPage, curPage int) string {
+func nextPage(maxPage, curPage int, listType string) string {
 	if curPage >= maxPage {
 		return "#"
 	}
 
-	return strconv.Itoa(curPage + 1)
+	return "/" + listType + "/" + strconv.Itoa(curPage+1)
 }
 
-func prevPage(maxPage, curPage int) string {
+func prevPage(maxPage, curPage int, listType string) string {
 	if curPage <= 1 {
 		return "#"
 	}
 
-	return strconv.Itoa(curPage - 1)
+	return "/" + listType + "/" + strconv.Itoa(curPage-1)
 }
 
 func getPageNumber(s string) int {
