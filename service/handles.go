@@ -84,13 +84,6 @@ func articlePage(c *fiber.Ctx) error {
 			bind["UpdateAt"] = md.UpdateAt.Format(configs.TimeLayout)
 		}
 	}
-
-	if md.IsDraft && !isAuthor(c) {
-		return content.Render(c, "custom", mergeBind(frame(c), map[string]interface{}{
-			"Content": content.PageNotAuthor(),
-		}))
-	}
-
 	bind["HasMetaHead"] = md.HasMetaHead
 
 	data, err := content.MarkdownPage(filename, md.Offset)
@@ -101,6 +94,13 @@ func articlePage(c *fiber.Ctx) error {
 			"Content": content.Page404(),
 		}))
 	}
+
+	if md.IsDraft && !isAuthor(c) {
+		return content.Render(c, "custom", mergeBind(frame(c), map[string]interface{}{
+			"Content": content.PageNotAuthor(),
+		}))
+	}
+
 	bind["Article"] = template.HTML(data)
 
 	return content.Render(c, "article", mergeBind(frame(c), bind))

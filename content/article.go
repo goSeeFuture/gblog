@@ -103,14 +103,16 @@ func reloadArticleMetaData(filename string) (MetaData, bool) {
 	}
 
 	articles := allarticles.Load().([]MetaData)
-	for i, e := range articles {
-		if e.Filename == filename {
-			articles[i] = md
-			break
+	t := make([]MetaData, 0, len(articles))
+	for _, e := range articles {
+		if isSameFile(filename, e.Filename) {
+			t = append(t, md)
+		} else {
+			t = append(t, e)
 		}
 	}
 
-	allarticles.Store(articles)
+	allarticles.Store(t)
 	return md, true
 }
 
@@ -338,4 +340,19 @@ func isSpecialArticle(path string) bool {
 	}
 
 	return false
+}
+
+// filename1 是绝对路径
+func isSameFile(filename1, filename2 string) bool {
+	filename2 = strings.TrimPrefix(filename2, configs.Setting.ArticleDir)
+	if filename2 != "" && filename2[0] == filepath.Separator {
+		filename2 = filename2[1:]
+	}
+
+	dir := strings.TrimSuffix(filename1, filename2)
+	if dir != "" && dir[len(dir)-1] == filepath.Separator {
+		dir = dir[:len(dir)-1]
+	}
+
+	return dir == configs.Setting.AbsArticleDir
 }
