@@ -12,6 +12,9 @@ type Config struct {
 	WebsiteName string
 	// 监听地址
 	Listen string
+	// 公开域名
+	PublicDomain string
+
 	// 文章目录
 	ArticleDir string
 	// 文章目录绝对路径

@@ -5,3 +5,4 @@ gblog
 gblog_*
 !gblog_process.png
 dist/
+author

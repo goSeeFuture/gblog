@@ -26,7 +26,7 @@ type layoutFile struct {
 var (
 	layout      sync.Map
 	layoutfiles = []layoutFile{
-		{Name: "404", Files: []string{"views/index.html", "views/header.html", "views/footer.html", "views/mathjax.html", "views/404.html"}},
+		{Name: "custom", Files: []string{"views/index.html", "views/header.html", "views/footer.html", "views/mathjax.html", "views/custom.html"}},
 		{Name: "list", Files: []string{"views/index.html", "views/header.html", "views/footer.html", "views/mathjax.html", "views/list.html"}},
 		{Name: "article", Files: []string{"views/index.html", "views/header.html", "views/footer.html", "views/mathjax.html", "views/article.html"}},
 	}
@@ -87,7 +87,7 @@ func fmtTime(t time.Time) string {
 
 func Page404() template.HTML {
 	if !configs.Setting.CustomWebsite404 {
-		return template.HTML("")
+		return template.HTML("<h2>没有找到页面</h2>")
 	}
 
 	p404, err := ioutil.ReadFile(filepath.Join(configs.Setting.AbsArticleDir, configs.CustomPage404))
@@ -127,4 +127,8 @@ func Footer() template.HTML {
 
 func hasPrefix(s string, prefix string) bool {
 	return strings.HasPrefix(s, prefix)
+}
+
+func PageNotAuthor() template.HTML {
+	return template.HTML(markdown2HTML([]byte("## 你无权查看草稿文章{.title}")))
 }

@@ -25,6 +25,9 @@ type MetaData struct {
 	Subtitle string `yaml:"Subtitle"`
 	// 文章标题
 	Title string `yaml:"Title"`
+	// 草稿标记
+	// 通过控制台qrcode得到预览草稿链接
+	IsDraft bool `yaml:"Draft"`
 
 	// 文件路径
 	Filename string `yaml:"-"`

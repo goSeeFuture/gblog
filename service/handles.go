@@ -85,14 +85,20 @@ func articlePage(c *fiber.Ctx) error {
 		}
 	}
 
+	if md.IsDraft && !isAuthor(c) {
+		return content.Render(c, "custom", mergeBind(frame(c), map[string]interface{}{
+			"Content": content.PageNotAuthor(),
+		}))
+	}
+
 	bind["HasMetaHead"] = md.HasMetaHead
 
 	data, err := content.MarkdownPage(filename, md.Offset)
 	if err != nil {
 		log.Println("get article failed:", err)
 
-		return content.Render(c, "404", mergeBind(frame(c), map[string]interface{}{
-			"Page404": content.Page404(),
+		return content.Render(c, "custom", mergeBind(frame(c), map[string]interface{}{
+			"Content": content.Page404(),
 		}))
 	}
 	bind["Article"] = template.HTML(data)
@@ -243,4 +249,30 @@ func getPageNumber(s string) int {
 	}
 
 	return page
+}
+
+func author(c *fiber.Ctx) error {
+	value := c.Params("value")
+
+	apvalue, err := getAuthorPreviewValue()
+	if err != nil {
+		panic(err)
+	}
+
+	if value != apvalue {
+		return fiber.NewError(fiber.StatusUnauthorized, "认证失败！")
+	}
+
+	sess, err := store.Get(c)
+	if err != nil {
+		panic(err)
+	}
+
+	sess.Set(authorField, true)
+	log.Println("set author")
+	if err := sess.Save(); err != nil {
+		panic(err)
+	}
+
+	return homePage(c)
 }

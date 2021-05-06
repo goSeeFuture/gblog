@@ -28,6 +28,16 @@ func Mux(app *fiber.App) {
 	app.Get("/articles/*", articlePage)
 	app.Get("/tag/:tag/:page?", tagPage)
 	app.Get("/category/:categoryid/:page?", categoryPage)
+
+	// 草稿预览权限
+	var err error
+	value, err := getAuthorPreviewValue()
+	if err == nil && value != "" {
+		log.Println("author router")
+		app.Get("/author/:value", author)
+	} else {
+		log.Println("rand author preview value failed:", err)
+	}
 }
 
 func setupMiddleware(app *fiber.App) {

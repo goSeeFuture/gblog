@@ -25,7 +25,8 @@
   <div class="tile is-ancestor">
     <div class="tile is-parent">
       <article class="tile is-child box  is-full">
-        <p class="title"><a class="article-title-link" href="/{{ $article.Filename }}">{{ $article.Title }}</a></p>
+        <p class="title">{{ if $article.IsDraft }}<span class="tag is-danger">草稿</span>&nbsp;{{ end }}<a class="article-title-link"
+            href="/{{ $article.Filename }}">{{ $article.Title }}</a></p>
         <p class="subtitle">{{ $article.Subtitle }}</p>
         <div class="content">
           <p>{{ $article.Summary }}</p>
