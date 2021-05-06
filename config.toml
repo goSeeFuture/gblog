@@ -4,7 +4,8 @@ WebsiteName = "我的博客"
 # 监听地址
 Listen = "127.0.0.1:3000"
 # 公开域名，不使用草稿可不填写
-PublicDomain = "http://localhost:3000"
+# 比如：PublicDomain = "http://www.youdomain.com"
+# PublicDomain = "http://localhost:3000"
 
 # ====================== 博文内容 =======================
 # 文章目录

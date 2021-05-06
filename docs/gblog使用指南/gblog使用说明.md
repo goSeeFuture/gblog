@@ -284,3 +284,78 @@ Path = "我/的/名字/很长"
 重启gblog服务，生效后的效果
 
 ![修改类别名称](/docs/assets/image/changecategory.png)
+
+### 草稿
+
+gblog 可以将未完成的文章发布未草稿，被设定为草稿的文章，需要作者权限才能阅读全文。
+你可以先将草稿发布到博客中，作为预告，待完成后，再对所有人开放阅读全文权限。
+
+接下来我将演示如何创建一篇草稿文章。
+
+#### 配置对外域名
+
+打开配置文件`config.toml`，并设定好`PublicDomain`项的值。
+
+```toml
+# 公开域名，不使用草稿可不填写
+# 比如：PublicDomain = "http://www.youdomain.com"
+PublicDomain = "http://localhost:3000"
+```
+
+接下来，重启服务，让配置生效。
+
+#### 标记草稿文章
+
+例如，我们创建一篇文章 `articles/这是一篇预发布的文章.md`文章最前面，写入以下内容
+
+```md
+---
+Draft: true
+---
+```
+
+这样，gblog将会把此文章识别为草稿文章。我们刷新博客，将看到如下文章列表
+
+![列表中的草稿文章](/docs/assets/image/listdraft.png)
+
+点击文章标题，将提示如下
+
+![无法浏览草稿文章](/docs/assets/image/cannotviewdraft.png)
+
+这是因为gblog不允许读者访问草稿文章的全部内容，作为作者的你需要阅读这篇草稿文章的全部内容，只需要进行如下操作
+
+查看`gblog`服务的启动日志，访问预览草稿链接
+
+![预览草稿链接](/docs/assets/image/authorlink.png)
+
+```
+二维码与链接是同样内容，你可以使用手机扫描二维码获得作者权限。
+```
+
+然后再次访问草稿文章即可显示文章全部内容
+
+![草稿全文](/docs/assets/image/viewdraft.png)
+
+## 为分类添加简介
+
+gblog支持为分类增加简短的文字介绍，要使用该功能需要在配置文件中设置如下项
+
+```toml
+# 为分类书写主题介绍
+# 需要实现`ArticleDir`/分类/topic.md
+CategoryTopic = true
+```
+
+    重启服务之后生效
+
+比如，要给`gblog使用指南`分类添加简介，需要建立`articles/gblog使用指南/topic.md`文件，并写入内容
+
+```toml
+# gblog
+
+简绍gblog博客系统的基础用法和使用技巧。
+```
+
+在导航栏上选择`gblog使用指南`分类，可以看到我们刚写的简介
+
+![分类简介](/docs/assets/image/categorytopic.png)
