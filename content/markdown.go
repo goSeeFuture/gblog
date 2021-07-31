@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/goSeeFuture/gblog/configs"
+	"github.com/goSeeFuture/gblog/pkg/toc"
 
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/beevik/etree"
@@ -19,7 +20,12 @@ import (
 	"github.com/yuin/goldmark/parser"
 )
 
-func MarkdownPage(filename string, offset int) ([]byte, error) {
+type HTMLPage struct {
+	Heads   []toc.Head
+	Content []byte
+}
+
+func MarkdownPage(filename string, offset int) (*HTMLPage, error) {
 	fs, err := os.Stat(filename)
 	if err != nil {
 		return nil, err
@@ -42,10 +48,11 @@ func MarkdownPage(filename string, offset int) ([]byte, error) {
 	}
 	f = f[offset:]
 
-	return markdown2HTML(f), nil
+	c, h := markdown2HTML(f)
+	return &HTMLPage{Heads: h, Content: c}, nil
 }
 
-func markdown2HTML(data []byte) []byte {
+func markdown2HTML(data []byte) ([]byte, []toc.Head) {
 	extensions := []goldmark.Extender{
 		extension.GFM,
 		highlighting.NewHighlighting(
@@ -63,15 +70,21 @@ func markdown2HTML(data []byte) []byte {
 		extensions = append(extensions, mathjax.MathJax)
 	}
 
-	md := goldmark.New(goldmark.WithExtensions(extensions...), goldmark.WithParserOptions(parser.WithAttribute()))
+	md := goldmark.New(
+		goldmark.WithExtensions(extensions...),
+		goldmark.WithParserOptions(
+			parser.WithAutoHeadingID(),
+			parser.WithAttribute(),
+		))
 
 	var buf bytes.Buffer
-	context := parser.NewContext()
+	slugID := toc.NewSlugID()
+	context := parser.NewContext(parser.WithIDs(slugID))
 	if err := md.Convert(data, &buf, parser.WithContext(context)); err != nil {
-		return nil
+		return nil, nil
 	}
 
-	return buf.Bytes()
+	return buf.Bytes(), slugID.(*toc.SlugID).Heads()
 }
 
 func removeH1(data []byte) ([]byte, string) {

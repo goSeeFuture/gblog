@@ -1,29 +1,70 @@
 {{ define "body" }}
 
+
+
 {{ if .HasMetaHead }}
 
-    <section class="container" show="{{ .HasMetaHead }}">
-        <div class="tags is-pulled-right">
-            {{ range $tag := .ArticleTags }}
-            <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
-            {{ end }}
+<section show="{{ .HasMetaHead }}">
+    <div class="columns">
+        <div class="column is-offset-2 is-8 py-0">
+            <div class="content my-0">
+                {{ if not .InlineTitle }}
+                <h1>{{ .Title }}</h1>
+                {{ end }}
+                {{ if ne .UpdateAt "" }}
+                <p>最后编辑于：{{ .UpdateAt }}</p>
+                {{ end }}
+            </div>
+            <div class="py-0 tags is-pulled-right">
+                {{ range $tag := .ArticleTags }}
+                <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
+                {{ end }}
+            </div>
         </div>
-        <div class="content">
-            {{ if not .InlineTitle }}
-            <h1>{{ .Title }}</h1>
-            {{ end }}
-            {{ if ne .UpdateAt "" }}
-            <p>最后编辑于：{{ .UpdateAt }}</p>
-            {{ end }}
-        </div>
-    </section>
+    </div>
+</section>
 
 {{ end }}
 
-<section class="container">
-    <div class="content">
-        {{ .Article }}
+<!-- 浮动控制按钮 -->
+<div class="is-flex-direction-column float-ctl">
+    <button class="button my-1" onclick="showTOC()">
+        <span class="icon is-small">
+            <i class="icon icon-list"></i>
+        </span>
+    </button>
+    <button class="button my-1" onclick="backToTop()">
+        <span class="icon is-small">
+            <i class="icon icon-arrow-up"></i>
+        </span>
+    </button>
+</div>
+
+<!-- 目录 -->
+<div class="box is-shadowless toc">
+    <div class="content toc-content" hidden>
+        <ul>
+            {{ range $item := .TOC }}
+            <li><a class="plx-{{ $item.Level }}" href="#{{ $item.ID }}">{{ $item.Text }}</a></li>
+            {{ end }}
+        </ul>
+    </div>
+</div>
+
+<!-- 文章内容 -->
+<section>
+    <div class="columns">
+        <div class="column is-offset-2 is-8">
+            <div class="content">
+                {{ .Article }}
+            </div>
+        </div>
+        <div class="column is-2">
+        </div>
     </div>
 </section>
+
+
+<script type="text/javascript" async src="/js/util.js"></script>
 
 {{ end }}

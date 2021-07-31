@@ -215,7 +215,8 @@ func getHeadContent(filename string, offset int) ([]byte, string, time.Time, boo
 		part = append(part, []byte("...")...)
 	}
 
-	header, h1 := removeH1(markdown2HTML(part))
+	c, _ := markdown2HTML(part)
+	header, h1 := removeH1(c)
 	return header, h1, fs.ModTime(), istopic
 }
 

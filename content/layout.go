@@ -41,7 +41,15 @@ func initLayoutTemplate() error {
 			"IsDigit":    isDigit,
 			"FormatTime": fmtTime,
 			"HasPrefix":  hasPrefix,
+			"FillSting": func(s string, count int) string {
+				var str string
+				for i := 0; i < count; i++ {
+					str += s
+				}
+				return str
+			},
 		})
+
 		t = parseTemplate(t, e)
 		if t == nil {
 			return errors.New("parse view template failed")
@@ -96,7 +104,7 @@ func Page404() template.HTML {
 		return template.HTML("")
 	}
 
-	data := markdown2HTML(p404)
+	data, _ := markdown2HTML(p404)
 	if data == nil {
 		log.Println("parse website 404 page failed")
 		return template.HTML("")
@@ -116,7 +124,7 @@ func Footer() template.HTML {
 		return template.HTML("")
 	}
 
-	data := markdown2HTML(footer)
+	data, _ := markdown2HTML(footer)
 	if data == nil {
 		log.Println("parse website footer failed")
 		return template.HTML("")
@@ -130,5 +138,6 @@ func hasPrefix(s string, prefix string) bool {
 }
 
 func PageNotAuthor() template.HTML {
-	return template.HTML(markdown2HTML([]byte("## 你无权查看草稿文章{.title}")))
+	c, _ := markdown2HTML([]byte("## 你无权查看草稿文章{.title}"))
+	return template.HTML(c)
 }

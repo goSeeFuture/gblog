@@ -11,3 +11,61 @@ a:hover {
 .footer {
     background-color: #fff;
 }
+
+body {
+    font-size: 14px;
+    font-family: Adelle, Roboto Slab, DejaVu Serif, Georgia, Times New Roman, sans-serif;
+}
+
+.float-ctl {
+    position: fixed;
+    top: 85%;
+    left: 85%;
+    z-index: 4;
+    display: flex;
+}
+
+.toc-button:focus~.toc {
+    display: block;
+}
+
+.toc {
+    position: fixed;
+    top: 15%;
+    left: 85%;
+    height: 45rem;
+    overflow: auto;
+    z-index: 3;
+}
+
+ul li {
+    list-style: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+.plx-1 {
+    padding-left: .5rem !important;
+}
+
+.plx-2 {
+    padding-left: 1rem !important;
+}
+
+.plx-3 {
+    padding-left: 2rem !important;
+}
+
+.plx-4 {
+    padding-left: 3rem !important;
+}
+
+.plx-5 {
+    padding-left: 4rem !important;
+}
+
+.plx-6 {
+    padding-left: 5rem;
+}

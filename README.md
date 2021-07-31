@@ -30,12 +30,12 @@ gblog是一个基于Markdown文档构建个人博客的服务，其设计意图�
 
 特别感谢：
 
-- [glodmark](github.com/yuin/goldmark)
-- [fiber](github.com/gofiber/fiber)
+- [glodmark](https://github.com/yuin/goldmark)
+- [fiber](https://github.com/gofiber/fiber)
 - [bulma](https://github.com/jgthms/bulma)
-- [go-toml](github.com/pelletier/go-toml)
-- [etree](github.com/beevik/etree)
-- [chroma](github.com/alecthomas/chroma)
-- [fsnotify](github.com/fsnotify/fsnotify)
+- [go-toml](https://github.com/pelletier/go-toml)
+- [etree](https://github.com/beevik/etree)
+- [chroma](https://github.com/alecthomas/chroma)
+- [fsnotify](https://github.com/fsnotify/fsnotify)
 
 正是因为你们的的付出，才有了这个博客项目，谢谢！

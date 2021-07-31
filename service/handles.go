@@ -101,8 +101,8 @@ func articlePage(c *fiber.Ctx) error {
 		}))
 	}
 
-	bind["Article"] = template.HTML(data)
-
+	bind["Article"] = template.HTML(data.Content)
+	bind["TOC"] = data.Heads
 	return content.Render(c, "article", mergeBind(frame(c), bind))
 }
 

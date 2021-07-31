@@ -2,7 +2,9 @@
 
 package content
 
-import "html/template"
+import (
+	"html/template"
+)
 
 func embedStaticViews() {}
 
@@ -12,5 +14,6 @@ func parseTemplate(t *template.Template, lf layoutFile) *template.Template {
 	if err != nil {
 		return nil
 	}
+
 	return t
 }
