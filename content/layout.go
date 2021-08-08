@@ -36,6 +36,7 @@ func initLayoutTemplate() error {
 	// 仅在go build -tags=embed有效
 	embedStaticViews()
 
+	var err error
 	for _, e := range layoutfiles {
 		t := template.New(e.Name).Funcs(template.FuncMap{
 			"IsDigit":    isDigit,
@@ -50,9 +51,9 @@ func initLayoutTemplate() error {
 			},
 		})
 
-		t = parseTemplate(t, e)
+		t, err = parseTemplate(t, e)
 		if t == nil {
-			return errors.New("parse view template failed")
+			return err
 		}
 
 		e.Template = t

@@ -19,21 +19,20 @@ body {
 
 .float-ctl {
     position: fixed;
-    top: 85%;
-    left: 85%;
+    top: 83%;
+    left: 83%;
     z-index: 4;
     display: flex;
+    flex-direction: column;
 }
 
-.toc-button:focus~.toc {
-    display: block;
-}
 
 .toc {
+    border-left: 2px dashed #efefef;
     position: fixed;
     top: 15%;
     left: 85%;
-    height: 45rem;
+    height: 35rem;
     overflow: auto;
     z-index: 3;
 }
@@ -43,6 +42,53 @@ ul li {
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+
+.no-border {
+    border-style: none;
+    box-sizing: unset;
+}
+
+.py-0 {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.px-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.mrx-1 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+
+.mrx-2 {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.mrx-4 {
+    margin-left: 4rem;
+    margin-right: 4rem;
+}
+
+.prx-1 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.prx-075 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+
+.prx-2 {
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 
@@ -68,4 +114,60 @@ ul li {
 
 .plx-6 {
     padding-left: 5rem;
+}
+
+#float-mobile-ctl {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3rem;
+    z-index: 10;
+    max-width: 100%;
+}
+
+.float-mobile-ctl {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.flex-right {
+    justify-content: flex-end;
+}
+
+.flex-bottom {
+    align-items: flex-end;
+}
+
+
+p>img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+article>table {
+    overflow: auto;
+}
+
+pre {
+    overflow: auto;
+}
+
+
+a:hover {
+    text-decoration: none;
+}
+
+a:focus {
+    text-decoration: none;
+}
+
+.math {
+    overflow: auto;
+    max-width: 100%;
 }

@@ -78,11 +78,8 @@ func articlePage(c *fiber.Ctx) error {
 		bind["Title"] = md.Title
 		bind["ArticleTags"] = md.Tags
 		bind["InlineTitle"] = md.InlineTitle
-		if md.UpdateAt.IsZero() {
-			bind["UpdateAt"] = ""
-		} else {
-			bind["UpdateAt"] = md.UpdateAt.Format(configs.TimeLayout)
-		}
+		bind["UpdateAt"] = md.UpdateAt.Format(configs.TimeLayout)
+		bind["UpdateFromNow"] = md.UpdateFromNow()
 	}
 	bind["HasMetaHead"] = md.HasMetaHead
 

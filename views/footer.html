@@ -2,12 +2,8 @@
 
 {{ if ne .Footer `` }}
 <section class="container">
-    <footer class="footer">
-        <div class="content has-text-centered">
-            <p>
-                {{ .Footer }}
-            </p>
-        </div>
+    <footer class="text-center">
+        {{ .Footer }}
     </footer>
 </section>
 {{ end }}

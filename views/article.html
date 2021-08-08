@@ -1,70 +1,94 @@
 {{ define "body" }}
 
 
-
-{{ if .HasMetaHead }}
-
-<section show="{{ .HasMetaHead }}">
+<section class="container" show="{{ .HasMetaHead }}">
     <div class="columns">
-        <div class="column is-offset-2 is-8 py-0">
-            <div class="content my-0">
-                {{ if not .InlineTitle }}
-                <h1>{{ .Title }}</h1>
-                {{ end }}
-                {{ if ne .UpdateAt "" }}
-                <p>最后编辑于：{{ .UpdateAt }}</p>
-                {{ end }}
-            </div>
-            <div class="py-0 tags is-pulled-right">
-                {{ range $tag := .ArticleTags }}
-                <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
-                {{ end }}
-            </div>
+        {{ if not .InlineTitle }}
+        <h1>{{ .Title }}</h1>
+        {{ end }}
+    </div>
+    <div class="columns">
+        <div class="column col-9 d-flex flex-bottom">
+            {{ range $tag := .ArticleTags }}
+            <span class="chip"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
+            {{ end }}
+        </div>
+        <div class="column col-3 d-flex flex-right flex-bottom prx-075">
+            {{ if ne .UpdateAt "" }}
+            <span class="d-flex" title="最后编辑于：{{ .UpdateAt }}">{{ .UpdateFromNow }}</span>
+            {{ end }}
         </div>
     </div>
 </section>
 
-{{ end }}
-
-<!-- 浮动控制按钮 -->
-<div class="is-flex-direction-column float-ctl">
-    <button class="button my-1" onclick="showTOC()">
-        <span class="icon is-small">
-            <i class="icon icon-list"></i>
-        </span>
-    </button>
-    <button class="button my-1" onclick="backToTop()">
-        <span class="icon is-small">
-            <i class="icon icon-arrow-up"></i>
-        </span>
-    </button>
-</div>
 
 <!-- 目录 -->
-<div class="box is-shadowless toc">
-    <div class="content toc-content" hidden>
-        <ul>
-            {{ range $item := .TOC }}
-            <li><a class="plx-{{ $item.Level }}" href="#{{ $item.ID }}">{{ $item.Text }}</a></li>
-            {{ end }}
-        </ul>
-    </div>
-</div>
-
-<!-- 文章内容 -->
-<section>
-    <div class="columns">
-        <div class="column is-offset-2 is-8">
-            <div class="content">
-                {{ .Article }}
-            </div>
-        </div>
-        <div class="column is-2">
+<section class="container hide-xs hide-sm">
+    <div class="toc">
+        <div class="content toc-content" hidden>
+            <ul>
+                {{ range $item := .TOC }}
+                <li><a class="plx-{{ $item.Level }}" href="#{{ $item.ID }}">{{ $item.Text }}</a></li>
+                {{ end }}
+            </ul>
         </div>
     </div>
 </section>
 
 
-<script type="text/javascript" async src="/js/util.js"></script>
+<!-- 文章内容 -->
+<section class="container">
+    <div class="columns is-gapless">
+        <div class="column col-xl-auto">
+            <article class="content mx-1">
+                {{ .Article }}
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- 浮动控制按钮 -->
+<div class="float-ctl hide-xs hide-sm">
+    <button class="btn my-1" onclick="toggleTOC()">
+        <i class="icon icon-menu"></i>
+    </button>
+    <button class="btn my-1" onclick="backToTop()">
+        <i class="icon icon-upward"></i>
+    </button>
+</div>
+
+<!-- 手机端，浮动控制按钮 -->
+<div id="float-mobile-ctl" class="show-xs show-sm hide-md hide-lg hide-xl">
+    <div class="float-mobile-ctl mrx-1">
+        <button class="btn mx-1" onclick="toggleTOC()">
+            <i class="icon icon-menu"></i>
+        </button>
+        <button class="btn mx-1" onclick="backToTop()">
+            <i class="icon icon-upward"></i>
+        </button>
+    </div>
+</div>
+
+
+<div class="modal" id="modal-id">
+    <div class="modal-container">
+        <div class="modal-header">
+            <a href="#close" class="btn btn-clear float-right" onclick="closeMobileTOC()"></a>
+            <div class="modal-title h5">目 录</div>
+        </div>
+        <div class="modal-body">
+            <div class="content">
+                <ul>
+                    {{ range $item := .TOC }}
+                    <li><a class="my-4 plx-{{ $item.Level }}" href="#{{ $item.ID }}"
+                            onclick="closeMobileTOC()">{{ $item.Text }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/util.js"></script>
 
 {{ end }}

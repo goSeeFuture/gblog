@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -46,6 +47,35 @@ type MetaData struct {
 
 	// 分类主题介绍
 	isCategoryTopic bool
+}
+
+func (md MetaData) UpdateFromNow() string {
+	dur := time.Since(md.UpdateAt)
+	if dur.Seconds() < 10 {
+		return "刚刚"
+	}
+
+	if dur.Minutes() < 1 {
+		return strconv.FormatInt(int64(dur.Seconds()), 10) + " 秒前"
+	}
+
+	if dur.Hours() < 1 {
+		return strconv.FormatInt(int64(dur.Minutes()), 10) + " 分钟前"
+	}
+
+	if dur.Hours() < 24 {
+		return strconv.FormatInt(int64(dur.Hours()), 10) + " 小时前"
+	}
+
+	if dur.Hours() < 720 {
+		return strconv.FormatInt(int64(dur.Hours()), 10) + " 天前"
+	}
+
+	if dur.Hours() < 8760 {
+		return strconv.FormatInt(int64(dur.Hours()/720), 10) + " 个月前"
+	}
+
+	return strconv.FormatInt(int64(dur.Hours()/8760), 10) + " 年前"
 }
 
 // 罗列所有文章的Meta头

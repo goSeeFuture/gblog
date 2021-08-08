@@ -1,86 +1,41 @@
 {{ define "header" }}
 
-<section class="container">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/">
+<section class="browser container py-2">
+    <header class="navbar">
+        <section class="navbar-section">
+            <div class="dropdown">
+                <a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+                    分类 <i class="icon icon-caret"></i>
+                </a>
+                <ul class="menu">
+                    {{ range $category := .Categories }}
+                    {{ if ne $category.Count 0 }}
+                    <li><a class="navbar-item" href="/category/{{ $category.ID }}">{{ $category.Name }}
+                            ({{ $category.Count }})</a></li>
+                    {{ end }}
+                    {{ end }}
+                </ul>
+            </div>
+        </section>
+        <section class="navbar-center">
+            <a href="/" class="navbar-brand mr-2">
                 <img src="/image/logo.png" width="112" height="28">
             </a>
-
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navWidgets">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-
-        <div id="navWidgets" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="/">
-                    首页
+        </section>
+        <section class="navbar-section">
+            <div class="dropdown">
+                <a href="#" class="btn btn-link dropdown-toggle" tabindex="0">
+                    标签 <i class="icon icon-caret"></i>
                 </a>
-
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        分类
-                    </a>
-
-                    <div class="navbar-dropdown">
-                        {{ range $category := .Categories }}
-                        {{ if ne $category.Count 0 }}
-                        <a class="navbar-item" href="/category/{{ $category.ID }}">{{ $category.Name }}
-                            ({{ $category.Count }})</a>
-                        {{ end }}
-                        {{ end }}
-                    </div>
-                </div>
-
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">
-                        标签
-                    </a>
-
-                    <div class="navbar-dropdown">
-                        {{ range $tag := .Tags }}
-                        {{ if ne $tag.Count 0 }}
-                        <a class="navbar-item" href="/tag/{{ $tag.Name }}">{{ $tag.Name }} ({{ $tag.Count }})</a>
-                        {{ end }}
-                        {{ end }}
-                    </div>
-                </div>
+                <ul class="menu">
+                    {{ range $tag := .Tags }}
+                    {{ if ne $tag.Count 0 }}
+                    <li><a class="navbar-item" href="/tag/{{ $tag.Name }}">{{ $tag.Name }} ({{ $tag.Count }})</a></li>
+                    {{ end }}
+                    {{ end }}
+                </ul>
             </div>
+        </section>
+    </header>
 
-        </div>
-    </nav>
-</section>
-
-<script>
-
-    //  移动端导航菜单按钮
-    document.addEventListener('DOMContentLoaded', () => {
-
-        // Get all "navbar-burger" elements
-        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-        // Check if there are any navbar burgers
-        if ($navbarBurgers.length > 0) {
-
-            // Add a click event on each of them
-            $navbarBurgers.forEach(el => {
-                el.addEventListener('click', () => {
-
-                    // Get the target from the "data-target" attribute
-                    const target = el.dataset.target;
-                    const $target = document.getElementById(target);
-
-                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                    el.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
-
-                });
-            });
-        }
-    });
-</script>
-
-{{ end }}
+    {{ end }}

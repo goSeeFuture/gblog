@@ -3,14 +3,13 @@
 {{ if  HasPrefix .ListType `category`  }}
 {{ if ne .Category.TopicTitle `` }}
 <section class="container">
-  <div class="tile is-ancestor">
-    <div class="tile is-parent">
-      <article class="tile is-child box is-full notification has-background-info-light">
-        <br />
-        <p class="title">#{{ .Category.TopicTitle }}</p>
-        <div class="content">
-          {{ .Category.Topic }}
-        </div>
+  <div class="panel bg-gray">
+    <div class="panel-header">
+      <div class="panel-title"><h3>#{{ .Category.TopicTitle }}</h3></div>
+    </div>
+    <div class="panel-body">
+      <article>
+        {{ .Category.Topic }}
       </article>
     </div>
   </div>
@@ -20,51 +19,48 @@
 
 
 <section class="container">
-
   {{ range $article := .Articles }}
-  <div class="tile is-ancestor">
-    <div class="tile is-parent">
-      <article class="tile is-child box  is-full">
-        <p class="title">{{ if $article.IsDraft }}<span class="tag is-danger">草稿</span>&nbsp;{{ end }}<a class="article-title-link"
-            href="/{{ $article.Filename }}">{{ $article.Title }}</a></p>
-        <p class="subtitle">{{ $article.Subtitle }}</p>
-        <div class="content">
-          <p>{{ $article.Summary }}</p>
-        </div>
-        <div class="columns">
-          <div class="column">
-            <p>最后修改于：{{ FormatTime .UpdateAt }}</p>
-          </div>
-        </div>
-        <div class="columns is-pulled-right">
-          <div class="tags">
-            {{ range $tag := .Tags }}
-            <span class="tag"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
-            {{ end }}
-          </div>
-        </div>
-      </article>
+  <div class="panel no-border">
+    <div class="panel-header">
+      <div class="panel-title">
+        {{ if $article.IsDraft }}<span class="toast toast-error">草稿</span>&nbsp;{{ end }}
+        <a class="article-title-link" href="/{{ $article.Filename }}">
+          <h2>{{ $article.Title }}</h2>
+        </a>
+      </div>
+    </div>
+    <div class="panel-header text-right py-0">
+      <span title="最后编辑于：{{ FormatTime .UpdateAt }}">最后编辑于：{{ .UpdateFromNow }}</span>
+    </div>
+    <div class="panel-body">
+      {{ $article.Summary }}
+    </div>
+    <div class="panel-footer">
+      {{ range $tag := .Tags }}
+      <span class="chip"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
+      {{ end }}
     </div>
   </div>
   {{ end }}
+  
+  <ul class="pagination">
+    <li class="page-item">
+      <a href="{{ .PrevPage }}" tabindex="-1">上一页</a>
+    </li>
+    {{ range $page := .Pages }}
+    <li class="page-item {{ if eq $page $.CurPage }} {{ `active` }} {{ end }}">
+      {{ if IsDigit $page }}
+      <a href="{{ printf `/%s/%s`  $.ListType $page }}">{{ $page }}</a>
+      {{ else }}
+      <span>...</span>
+      {{ end}}
+    </li>
+    {{ end}}
+    <li class="page-item">
+      <a href="{{ .NextPage }}">下一页</a>
+    </li>
+  </ul>
 
 
-  <nav class="pagination is-small" role="navigation" aria-label="pagination">
-    <a class="pagination-previous" href="{{ .PrevPage }}">上一页</a>
-    <a class="pagination-next" href="{{ .NextPage }}">下一页</a>
-    <ul class="pagination-list">
-      {{ range $page := .Pages }}
-      <li>
-        {{ if IsDigit $page }}
-        <a class="pagination-link {{ if eq $page $.CurPage }} {{ `is-current` }} {{ end }}"
-          href="{{ printf `/%s/%s`  $.ListType $page }}">{{ $page }}</a>
-        {{ else }}
-        <span class="pagination-ellipsis">{{ $page }}</span>
-        {{ end}}
-      </li>
-      {{ end }}
-    </ul>
-  </nav>
-</section>
 
 {{ end }}

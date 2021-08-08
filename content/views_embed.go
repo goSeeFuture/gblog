@@ -20,7 +20,7 @@ func embedStaticViews() {
 	views = packr.New("ViewTemplates", "../views")
 }
 
-func parseTemplate(t *template.Template, lf layoutFile) *template.Template {
+func parseTemplate(t *template.Template, lf layoutFile) (*template.Template, error) {
 	var err error
 	var tpl string
 	for _, f := range lf.Files {
@@ -28,7 +28,7 @@ func parseTemplate(t *template.Template, lf layoutFile) *template.Template {
 		tpl, err = views.FindString(f)
 		if err != nil {
 			log.Println("not found static template:", f)
-			return nil
+			return nil, err
 		}
 
 		var tmpl *template.Template
@@ -45,9 +45,9 @@ func parseTemplate(t *template.Template, lf layoutFile) *template.Template {
 		_, err = tmpl.Parse(tpl)
 		if err != nil {
 			log.Println("parse template", f, " failed:", err)
-			return nil
+			return nil, err
 		}
 	}
 
-	return t
+	return t, nil
 }

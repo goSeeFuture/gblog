@@ -8,12 +8,12 @@ import (
 
 func embedStaticViews() {}
 
-func parseTemplate(t *template.Template, lf layoutFile) *template.Template {
+func parseTemplate(t *template.Template, lf layoutFile) (*template.Template, error) {
 	var err error
 	t, err = t.ParseFiles(lf.Files...)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return t
+	return t, nil
 }
