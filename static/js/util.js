@@ -7,14 +7,14 @@ function isMobile() {
 }
 
 function toggleTOC() {
-    console.log("isMobile()", isMobile())
     if (isMobile()) {
         var c = document.querySelector('.modal')
         if (c.getAttribute('class').lastIndexOf('active') == -1) {
             c.setAttribute('class', 'modal active')
         }
     } else {
-        var c = document.querySelector('.toc-content')
+        console.log("toggleTOC pc")
+        var c = document.querySelector('.toc')
         if (c.hasAttribute('hidden')) {
             c.removeAttribute('hidden')
         } else {

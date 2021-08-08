@@ -5,7 +5,7 @@
 <section class="container">
   <div class="panel bg-gray">
     <div class="panel-header">
-      <div class="panel-title"><h3>#{{ .Category.TopicTitle }}</h3></div>
+      <div class="panel-title">#{{ .Category.TopicTitle }}</div>
     </div>
     <div class="panel-body">
       <article>
@@ -23,26 +23,32 @@
   <div class="panel no-border">
     <div class="panel-header">
       <div class="panel-title">
-        {{ if $article.IsDraft }}<span class="toast toast-error">草稿</span>&nbsp;{{ end }}
         <a class="article-title-link" href="/{{ $article.Filename }}">
-          <h2>{{ $article.Title }}</h2>
+          <span class="list-title">
+            {{ if $article.IsDraft }}
+            <span class="bg-error px-1 py-1">草稿</span>
+            {{ else }}
+            📖
+            {{ end }}
+            {{ $article.Title }}
+          </span>
         </a>
       </div>
     </div>
-    <div class="panel-header text-right py-0">
+    <div class="panel-header text-right py-1">
       <span title="最后编辑于：{{ FormatTime .UpdateAt }}">最后编辑于：{{ .UpdateFromNow }}</span>
     </div>
-    <div class="panel-body">
+    <div class="panel-body bg-gray prt-1">
       {{ $article.Summary }}
     </div>
-    <div class="panel-footer">
+    <div class="panel-footer bg-gray">
       {{ range $tag := .Tags }}
       <span class="chip"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
       {{ end }}
     </div>
   </div>
   {{ end }}
-  
+
   <ul class="pagination">
     <li class="page-item">
       <a href="{{ .PrevPage }}" tabindex="-1">上一页</a>
@@ -63,4 +69,4 @@
 
 
 
-{{ end }}
+  {{ end }}

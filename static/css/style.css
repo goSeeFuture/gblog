@@ -64,6 +64,13 @@ ul li {
     margin-right: 1rem;
 }
 
+.prb-1 {
+    padding-bottom: 1rem;
+}
+
+.mrt-1 {
+    margin-top: 1rem;
+}
 
 .mrx-2 {
     margin-left: 2rem;
@@ -143,6 +150,9 @@ ul li {
     align-items: flex-end;
 }
 
+.flex-middle {
+    align-items: center;
+}
 
 p>img {
     display: block;
@@ -167,7 +177,42 @@ a:focus {
     text-decoration: none;
 }
 
+a:visited {
+    text-decoration: none;
+}
+
 .math {
     overflow: auto;
     max-width: 100%;
+}
+
+.panel-title {
+    font-weight: 600;
+    font-size: 1.5em;
+}
+
+.content {
+    background-color: #fff;
+}
+
+li>p {
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+
+.panel-body>p {
+    margin-bottom: 0;
+    margin-top: 1rem;
+}
+
+.list-title {
+    margin-bottom: 0;
+    color: #000;
+    font-size: 1.25rem;
+}
+
+.title-sign {
+    color: #999;
+    font-size: 1.5rem;
 }

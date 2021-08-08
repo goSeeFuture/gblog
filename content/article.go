@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -245,9 +246,12 @@ func getHeadContent(filename string, offset int) ([]byte, string, time.Time, boo
 		part = append(part, []byte("...")...)
 	}
 
+	var h1 string
+	part, h1 = removeMarkdownH1(part)
+	// 移除标题格式，让概要更加紧凑
+	part = regexp.MustCompile(`#{1,6}\s`).ReplaceAll(part, []byte{})
 	c, _ := markdown2HTML(part)
-	header, h1 := removeH1(c)
-	return header, h1, fs.ModTime(), istopic
+	return c, h1, fs.ModTime(), istopic
 }
 
 func getMetaData(filename string) ([]byte, int) {
@@ -295,7 +299,7 @@ func getMetaData(filename string) ([]byte, int) {
 		i += len(yamlTag)
 	}
 
-	return data[len(yamlTag):i], i
+	return data[len(yamlTag):i], i + len(yamlTag)
 }
 
 func ArticlesByPage(pageSize, pageNumber int) (total int, heads []MetaData) {

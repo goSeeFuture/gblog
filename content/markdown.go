@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 
 	"github.com/goSeeFuture/gblog/configs"
 	"github.com/goSeeFuture/gblog/pkg/toc"
@@ -48,7 +49,9 @@ func MarkdownPage(filename string, offset int) (*HTMLPage, error) {
 	}
 	f = f[offset:]
 
+	f, _ = removeMarkdownH1(f)
 	c, h := markdown2HTML(f)
+
 	return &HTMLPage{Heads: h, Content: c}, nil
 }
 
@@ -85,6 +88,34 @@ func markdown2HTML(data []byte) ([]byte, []toc.Head) {
 	}
 
 	return buf.Bytes(), slugID.(*toc.SlugID).Heads()
+}
+
+func removeMarkdownH1(data []byte) ([]byte, string) {
+	if len(data) == 0 {
+		return nil, ""
+	}
+
+	data = bytes.TrimLeft(data, "\r\n\t ")
+	i := bytes.Index(data, []byte{'\n'})
+	if i == -1 || !regexp.MustCompile(`^#\s`).Match(data[:i]) {
+		return data, ""
+	}
+
+	return bytes.TrimLeft(data[i+1:], "\r\n\t "), string(data[2:i])
+}
+
+func getH1(data []byte) string {
+	if len(data) == 0 {
+		return ""
+	}
+
+	data = bytes.TrimLeft(data, "\r\n\t ")
+	i := bytes.Index(data, []byte{'\n'})
+	if i == -1 || !regexp.MustCompile(`^#\s`).Match(data[:i]) {
+		return ""
+	}
+
+	return string(data[2:i])
 }
 
 func removeH1(data []byte) ([]byte, string) {

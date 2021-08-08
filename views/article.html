@@ -3,11 +3,9 @@
 
 <section class="container" show="{{ .HasMetaHead }}">
     <div class="columns">
-        {{ if not .InlineTitle }}
         <h1>{{ .Title }}</h1>
-        {{ end }}
     </div>
-    <div class="columns">
+    <div class="columns prb-1">
         <div class="column col-9 d-flex flex-bottom">
             {{ range $tag := .ArticleTags }}
             <span class="chip"><a href="/tag/{{ $tag }}">{{ $tag }}</a></span>
@@ -24,14 +22,19 @@
 
 <!-- 目录 -->
 <section class="container hide-xs hide-sm">
-    <div class="toc">
-        <div class="content toc-content" hidden>
-            <ul>
-                {{ range $item := .TOC }}
-                <li><a class="plx-{{ $item.Level }}" href="#{{ $item.ID }}">{{ $item.Text }}</a></li>
-                {{ end }}
-            </ul>
-        </div>
+    <div class="toc" hidden>
+        <div class="panel toc-content">
+            <div class="panel-header">
+              <div class="panel-title">目 录</div>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    {{ range $item := .TOC }}
+                    <li><a class="plx-{{ $item.Level }}" href="#{{ $item.ID }}">{{ $item.Text }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+          </div>
     </div>
 </section>
 
